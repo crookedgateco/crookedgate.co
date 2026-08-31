@@ -1,1614 +1,568 @@
-:root {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
-  --cream: #f2eadc;
-  --cream-dark: #e7dac5;
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  --ink: #17140f;
+  <title>Crooked Gate Seasonings</title>
 
-  --muted: #6e6457;
+  <meta
+    name="description"
+    content="Crooked Gate Seasonings. Family crafted, small batch seasoning blends made for real kitchens, shared meals, and recipes worth keeping."
+  >
 
-  --line: #b9aa94;
+  <link rel="stylesheet" href="/style.css">
+</head>
 
-}
 
+<body>
 
-/* GLOBAL */
+  <!-- TOP BAR -->
 
+  <div class="topbar">
+    Family Crafted · Small Batch · Simple Ingredients · Big Flavor
+  </div>
 
-* {
 
-  box-sizing: border-box;
+  <!-- HEADER -->
 
-}
+  <header class="site-header">
 
+    <div class="wrap nav">
 
-html {
+      <a class="brand" href="/">
+        Crooked Gate
+      </a>
 
-  scroll-behavior: smooth;
+      <nav class="nav-links">
+        <a href="#family-recipes">
+          Seasonings
+        </a>
 
-}
+        <a href="/recipes/">
+          Recipes
+        </a>
 
+        <a href="#our-story">
+          Our Story
+        </a>
+      </nav>
 
-body {
+      <button
+        class="pantry-button"
+        id="pantryButton"
+        type="button"
+      >
+        The Pantry · <span id="cartCount">0</span>
+      </button>
 
-  margin: 0;
+    </div>
 
-  background: var(--cream);
+  </header>
 
-  color: var(--ink);
 
-  font-family: Georgia, "Times New Roman", serif;
+  <main>
 
-}
 
+    <!-- HERO -->
 
-body.pantry-open {
+    <section class="hero">
 
-  overflow: hidden;
+      <div class="wrap hero-grid">
 
-}
+        <div>
 
+          <img
+            class="hero-logo"
+            src="/IMG_5975.jpeg"
+            alt="Crooked Gate Seasonings"
+          >
 
-img {
+        </div>
 
-  display: block;
 
-  max-width: 100%;
+        <div class="hero-copy">
 
-}
+          <div class="eyebrow">
+            Crooked Gate Seasonings
+          </div>
 
+          <h1>
+            Every Family Recipe Has to Start Somewhere.
+          </h1>
 
-a {
+          <p>
+            Small-batch seasoning blends made for real kitchens,
+            shared meals, and the recipes your family asks you to
+            make again.
+          </p>
 
-  color: inherit;
+          <div class="hero-actions">
 
-  text-decoration: none;
+            <a
+              class="button primary-button"
+              href="#family-recipes"
+            >
+              Shop the Family Recipes
+            </a>
 
-}
+            <a
+              class="button secondary-button"
+              href="#whats-for-dinner"
+            >
+              What's for Dinner?
+            </a>
 
+          </div>
 
-button {
+        </div>
 
-  color: inherit;
+      </div>
 
-  font: inherit;
+    </section>
 
-}
 
+    <!-- FAMILY RECIPES -->
 
-.wrap {
+    <section
+      class="collection"
+      id="family-recipes"
+    >
 
-  width: min(1180px, 92vw);
+      <div class="wrap">
 
-  margin: 0 auto;
+        <div class="section-head">
 
-}
+          <div class="eyebrow">
+            The Collection
+          </div>
 
+          <h2>
+            Family Recipes
+          </h2>
 
-.eyebrow {
+          <p>
+            Eleven numbered blends made to handle everything
+            from weeknight dinners to the meals everybody
+            remembers.
+          </p>
 
-  font-family: Arial, sans-serif;
+        </div>
 
-  font-size: 10px;
 
-  font-weight: 700;
+        <!--
+          site.js automatically builds all 11 product cards here
+        -->
 
-  letter-spacing: .2em;
+        <div
+          class="products"
+          id="productGrid"
+        ></div>
 
-  text-transform: uppercase;
+      </div>
 
-  color: var(--muted);
+    </section>
 
-}
 
+    <!-- WHAT'S FOR DINNER -->
 
-.light-eyebrow {
+    <section
+      class="homepage-feature dark-feature"
+      id="whats-for-dinner"
+    >
 
-  color: var(--cream-dark);
+      <div class="wrap feature-grid">
 
-}
+        <div class="feature-number">
+          30/30
+        </div>
 
+        <div class="feature-copy">
 
-h1,
-h2,
-h3 {
+          <div class="eyebrow light-eyebrow">
+            What's for Dinner?
+          </div>
 
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+          <h2>
+            Dinner in 30 Minutes. Around $30.
+          </h2>
 
-  text-transform: uppercase;
+          <p>
+            Straightforward meals built around Crooked Gate
+            blends. Less wondering what to make. More getting
+            dinner on the table.
+          </p>
 
-  letter-spacing: .02em;
+          <a
+            class="button light-button"
+            href="/30-30/"
+          >
+            Find a 30/30 Meal
+          </a>
 
-}
+        </div>
 
+      </div>
 
-.button {
+    </section>
 
-  min-height: 48px;
 
-  padding: 14px 18px;
+    <!-- QUICK ONES -->
 
-  display: inline-flex;
+    <section class="homepage-feature">
 
-  align-items: center;
+      <div class="wrap feature-grid reverse-feature">
 
-  justify-content: center;
+        <div class="feature-copy">
 
-  border: 1px solid var(--ink);
+          <div class="eyebrow">
+            Quick Ones
+          </div>
 
-  font-family: Arial, sans-serif;
+          <h2>
+            When Dinner Needed to Happen Ten Minutes Ago.
+          </h2>
 
-  font-size: 10px;
+          <p>
+            Fast meals for busy nights, late nights, and nights
+            when nobody planned a damn thing until everyone
+            got hungry.
+          </p>
 
-  font-weight: 700;
+          <a
+            class="button primary-button"
+            href="/quick-ones/"
+          >
+            Save Dinner
+          </a>
 
-  letter-spacing: .14em;
+        </div>
 
-  text-transform: uppercase;
 
-  text-align: center;
+        <div class="feature-number">
+          QUICK
+        </div>
 
-}
+      </div>
 
+    </section>
 
-.primary-button {
 
-  background: var(--ink);
+    <!-- ONE PAN -->
 
-  color: var(--cream);
+    <section class="homepage-feature dark-feature">
 
-}
+      <div class="wrap feature-grid">
 
+        <div class="feature-number">
+          1
+        </div>
 
-.secondary-button {
+        <div class="feature-copy">
 
-  background: transparent;
+          <div class="eyebrow light-eyebrow">
+            One Pan
+          </div>
 
-  color: var(--ink);
+          <h2>
+            Less Cleanup. Still Tastes Like You Tried.
+          </h2>
 
-}
+          <p>
+            Simple meals built around one pan, one skillet,
+            or one sheet tray. Big flavor without destroying
+            the kitchen.
+          </p>
 
+          <a
+            class="button light-button"
+            href="/one-pan/"
+          >
+            Find a One Pan Meal
+          </a>
 
-.light-button {
+        </div>
 
-  border-color: var(--cream);
+      </div>
 
-  background: var(--cream);
+    </section>
 
-  color: var(--ink);
 
-}
+    <!-- FROM OUR TABLE -->
 
+    <section class="homepage-feature">
 
-/* TOP BAR */
+      <div class="wrap feature-grid reverse-feature">
 
+        <div class="feature-copy">
 
-.topbar {
+          <div class="eyebrow">
+            From Our Table
+          </div>
 
-  padding: 10px 15px;
+          <h2>
+            Ranch Burgers & Fries
+          </h2>
 
-  background: var(--ink);
+          <p>
+            A simple burger-and-fries dinner seasoned with
+            Crooked Gate No. 01 Ranch from the patties to
+            the potatoes.
+          </p>
 
-  color: var(--cream);
+          <a
+            class="button primary-button"
+            href="/recipes/ranch-burgers/"
+          >
+            Make the Recipe
+          </a>
 
-  text-align: center;
+        </div>
 
-  font-family: Arial, sans-serif;
 
-  font-size: 9px;
+        <div class="feature-number">
+          No.01
+        </div>
 
-  font-weight: 700;
+      </div>
 
-  letter-spacing: .22em;
+    </section>
 
-  text-transform: uppercase;
 
-}
+    <!-- STORY -->
 
+    <section
+      class="story"
+      id="our-story"
+    >
 
-/* HEADER */
+      <div class="wrap story-grid">
 
+        <div>
 
-.site-header {
+          <div class="eyebrow">
+            Our Story
+          </div>
 
-  position: sticky;
+          <h2>
+            Recipes Worth Keeping.
+          </h2>
 
-  top: 0;
+          <p>
+            Some recipes are written down. Some are remembered.
+            And some become the meals everybody asks you to
+            make again.
+          </p>
 
-  z-index: 50;
+          <p>
+            Crooked Gate is a collection of small-batch
+            seasoning blends made for real kitchens, shared
+            meals, and recipes worth keeping.
+          </p>
 
-  background: rgba(242, 234, 220, .97);
+        </div>
 
-  border-bottom: 1px solid var(--line);
 
-}
+        <div class="story-note">
 
+          <strong>
+            From Our Table
+          </strong>
 
-.nav {
+          <p>
+            Start with the blend, find something good to make,
+            and make it your own. As the collection grows,
+            so will the recipes and meal ideas that go with
+            each number.
+          </p>
 
-  min-height: 70px;
+        </div>
 
-  display: flex;
+      </div>
 
-  align-items: center;
+    </section>
 
-  gap: 28px;
 
-}
+    <!-- VALUES -->
 
+    <section class="values">
 
-.brand {
+      <div class="wrap value-grid">
 
-  margin-right: auto;
+        <article class="value">
 
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+          <h3>
+            Simple Ingredients
+          </h3>
 
-  font-size: 22px;
+          <p>
+            Thoughtfully blended seasonings made to make
+            everyday cooking easier.
+          </p>
 
-  letter-spacing: .04em;
+        </article>
 
-  text-transform: uppercase;
 
-}
+        <article class="value">
 
+          <h3>
+            Small Batch
+          </h3>
 
-.nav-links {
+          <p>
+            Family crafted in small batches with attention
+            to every blend.
+          </p>
 
-  display: flex;
+        </article>
 
-  align-items: center;
 
-  gap: 24px;
+        <article class="value">
 
-}
+          <h3>
+            Big Flavor
+          </h3>
 
+          <p>
+            Made for the meals your family already loves
+            and the recipes still to come.
+          </p>
 
-.nav-links a {
+        </article>
 
-  font-family: Arial, sans-serif;
+      </div>
 
-  font-size: 9px;
+    </section>
 
-  font-weight: 700;
 
-  letter-spacing: .13em;
+  </main>
 
-  text-transform: uppercase;
 
-}
+  <!-- FOOTER -->
 
+  <footer class="site-footer">
 
-.pantry-button {
+    <strong>
+      Every Family Recipe Has to Start Somewhere.
+    </strong>
 
-  padding: 11px 14px;
+    <span>
+      Crooked Gate Seasonings · Family Crafted · Small Batch
+    </span>
 
-  border: 1px solid var(--ink);
+  </footer>
 
-  background: var(--ink);
 
-  color: var(--cream);
+  <!-- PANTRY OVERLAY -->
 
-  cursor: pointer;
+  <div
+    class="pantry-overlay"
+    id="pantryOverlay"
+  ></div>
 
-  font-family: Arial, sans-serif;
 
-  font-size: 9px;
+  <!-- PANTRY DRAWER -->
 
-  font-weight: 700;
+  <aside
+    class="pantry-drawer"
+    id="pantryDrawer"
+    aria-hidden="true"
+  >
 
-  letter-spacing: .13em;
+    <div class="pantry-header">
 
-  text-transform: uppercase;
+      <div class="eyebrow">
+        Crooked Gate
+      </div>
 
-  white-space: nowrap;
+      <h2>
+        Your Pantry
+      </h2>
 
-}
+      <p
+        class="pantry-message"
+        id="pantryMessage"
+      >
+        The pantry's empty.
+      </p>
 
+      <button
+        class="close-pantry"
+        id="closePantryButton"
+        type="button"
+        aria-label="Close pantry"
+      >
+        ×
+      </button>
 
-.pantry-button.bump {
+    </div>
 
-  animation: pantry-bump .28s ease;
 
-}
+    <div
+      class="pantry-items"
+      id="pantryItems"
+    ></div>
 
 
-@keyframes pantry-bump {
+    <div class="pantry-footer">
 
-  50% {
+      <div class="pantry-total">
 
-    transform: scale(1.07);
+        <span>
+          Subtotal
+        </span>
 
-  }
+        <strong id="pantryTotal">
+          $0.00
+        </strong>
 
-}
+      </div>
 
 
-/* HERO */
+      <button
+        class="checkout-button"
+        id="checkoutButton"
+        type="button"
+      >
+        Head to Checkout →
+      </button>
 
 
-.hero {
+      <button
+        class="keep-shopping"
+        id="keepShoppingButton"
+        type="button"
+      >
+        Keep Stocking the Pantry
+      </button>
 
-  padding: 62px 0 68px;
 
-  border-bottom: 1px solid var(--line);
+      <p class="pantry-note">
+        Checkout is coming soon.
+      </p>
 
-}
+    </div>
 
+  </aside>
 
-.hero-grid {
 
-  display: grid;
+  <!-- TOAST -->
 
-  grid-template-columns: .8fr 1.2fr;
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
 
-  align-items: center;
 
-  gap: 70px;
+  <!-- SHARED SITE JAVASCRIPT -->
 
-}
+  <script src="/site.js"></script>
 
-
-.hero-logo {
-
-  width: min(420px, 100%);
-
-  margin: 0 auto;
-
-}
-
-
-.hero h1 {
-
-  max-width: 760px;
-
-  margin: 10px 0 20px;
-
-  font-size: clamp(54px, 7vw, 98px);
-
-  line-height: .91;
-
-}
-
-
-.hero-copy p {
-
-  max-width: 660px;
-
-  margin: 0;
-
-  font-size: 19px;
-
-  line-height: 1.65;
-
-}
-
-
-.hero-actions {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 10px;
-
-  margin-top: 28px;
-
-}
-
-
-/* SECTION HEADING */
-
-
-.section-head {
-
-  max-width: 760px;
-
-  margin: 0 auto 44px;
-
-  text-align: center;
-
-}
-
-
-.section-head h2 {
-
-  margin: 7px 0 10px;
-
-  font-size: clamp(46px, 6vw, 76px);
-
-  line-height: .95;
-
-}
-
-
-.section-head p {
-
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 17px;
-
-  line-height: 1.6;
-
-}
-
-
-/* PRODUCTS */
-
-
-.collection {
-
-  padding: 70px 0 80px;
-
-}
-
-
-.products {
-
-  display: grid;
-
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 58px 30px;
-
-}
-
-
-.product-card {
-
-  min-width: 0;
-
-}
-
-
-.product-label-link {
-
-  display: block;
-
-}
-
-
-.label-frame {
-
-  width: 100%;
-
-  overflow: hidden;
-
-  background: var(--cream);
-
-}
-
-
-.label-frame img {
-
-  width: 102%;
-
-  max-width: none;
-
-  height: auto;
-
-  margin: -1% 0 -1% -1%;
-
-}
-
-
-.product-info {
-
-  padding-top: 17px;
-
-}
-
-
-.product-number {
-
-  color: var(--muted);
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .17em;
-
-  text-transform: uppercase;
-
-}
-
-
-.product-name {
-
-  display: inline-block;
-
-  margin: 5px 0 9px;
-
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-
-  font-size: 30px;
-
-  line-height: 1;
-
-  text-transform: uppercase;
-
-}
-
-
-.product-description {
-
-  min-height: 47px;
-
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 15px;
-
-  line-height: 1.55;
-
-}
-
-
-.view-product {
-
-  display: inline-block;
-
-  margin-top: 13px;
-
-  padding-bottom: 3px;
-
-  border-bottom: 1px solid var(--ink);
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .13em;
-
-  text-transform: uppercase;
-
-}
-
-
-/* PURCHASING */
-
-
-.buy-box {
-
-  margin-top: 20px;
-
-  padding-top: 17px;
-
-  border-top: 1px solid var(--line);
-
-}
-
-
-.choose-label {
-
-  display: block;
-
-  margin-bottom: 9px;
-
-  color: var(--muted);
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .17em;
-
-  text-transform: uppercase;
-
-}
-
-
-.size-options {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 8px;
-
-}
-
-
-.size-button {
-
-  min-height: 43px;
-
-  border: 1px solid var(--ink);
-
-  background: transparent;
-
-  cursor: pointer;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .08em;
-
-  text-transform: uppercase;
-
-}
-
-
-.size-button.selected {
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-}
-
-
-.add-pantry {
-
-  width: 100%;
-
-  min-height: 45px;
-
-  margin-top: 8px;
-
-  border: 1px solid var(--ink);
-
-  background: transparent;
-
-  cursor: pointer;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .15em;
-
-  text-transform: uppercase;
-
-}
-
-
-.add-pantry.added {
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-}
-
-
-/* HOMEPAGE FEATURES */
-
-
-.homepage-feature {
-
-  padding: 72px 0;
-
-  border-top: 1px solid var(--ink);
-
-}
-
-
-.dark-feature {
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-}
-
-
-.feature-grid {
-
-  display: grid;
-
-  grid-template-columns: .75fr 1.25fr;
-
-  align-items: center;
-
-  gap: 70px;
-
-}
-
-
-.reverse-feature {
-
-  grid-template-columns: 1fr 1fr;
-
-}
-
-
-.feature-number {
-
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-
-  font-size: clamp(95px, 15vw, 190px);
-
-  line-height: .78;
-
-  text-align: center;
-
-}
-
-
-.feature-copy h2 {
-
-  max-width: 720px;
-
-  margin: 8px 0 16px;
-
-  font-size: clamp(46px, 6vw, 76px);
-
-  line-height: .94;
-
-}
-
-
-.feature-copy p {
-
-  max-width: 660px;
-
-  margin: 0 0 25px;
-
-  font-size: 17px;
-
-  line-height: 1.65;
-
-}
-
-
-.dark-feature .feature-copy p {
-
-  color: var(--cream-dark);
-
-}
-
-
-.feature-photo {
-
-  width: 100%;
-
-  max-height: 560px;
-
-  object-fit: cover;
-
-  border: 1px solid var(--line);
-
-}
-
-
-/* STORY */
-
-
-.story {
-
-  padding: 70px 0;
-
-  border-top: 1px solid var(--line);
-
-}
-
-
-.story-grid {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 70px;
-
-}
-
-
-.story h2 {
-
-  margin: 8px 0 17px;
-
-  font-size: clamp(46px, 6vw, 74px);
-
-  line-height: .94;
-
-}
-
-
-.story p {
-
-  font-size: 18px;
-
-  line-height: 1.7;
-
-}
-
-
-.story-note {
-
-  align-self: center;
-
-  padding-left: 26px;
-
-  border-left: 3px solid var(--ink);
-
-}
-
-
-.story-note strong {
-
-  display: block;
-
-  margin-bottom: 10px;
-
-  font-size: 26px;
-
-}
-
-
-/* VALUES */
-
-
-.values {
-
-  padding: 15px 0 65px;
-
-}
-
-
-.value-grid {
-
-  display: grid;
-
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 28px;
-
-}
-
-
-.value {
-
-  padding-top: 18px;
-
-  border-top: 1px solid var(--line);
-
-}
-
-
-.value h3 {
-
-  margin: 0 0 9px;
-
-  font-size: 27px;
-
-}
-
-
-.value p {
-
-  margin: 0;
-
-  color: var(--muted);
-
-  line-height: 1.55;
-
-}
-
-
-/* FOOTER */
-
-
-.site-footer {
-
-  padding: 42px 20px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-  text-align: center;
-
-  font-size: 13px;
-
-  line-height: 1.6;
-
-}
-
-
-/* PANTRY */
-
-
-.pantry-overlay {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 100;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  background: rgba(23, 20, 15, .55);
-
-  transition: opacity .25s ease;
-
-}
-
-
-.pantry-overlay.open {
-
-  pointer-events: auto;
-
-  opacity: 1;
-
-}
-
-
-.pantry-drawer {
-
-  position: fixed;
-
-  top: 0;
-
-  right: 0;
-
-  z-index: 101;
-
-  width: min(440px, 94vw);
-
-  height: 100dvh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  border-left: 1px solid var(--ink);
-
-  background: var(--cream);
-
-  transform: translateX(105%);
-
-  transition: transform .3s ease;
-
-}
-
-
-.pantry-drawer.open {
-
-  transform: translateX(0);
-
-}
-
-
-.pantry-header {
-
-  position: relative;
-
-  padding: 25px 22px 20px;
-
-  border-bottom: 1px solid var(--line);
-
-}
-
-
-.pantry-header h2 {
-
-  margin: 4px 0 0;
-
-  font-size: 46px;
-
-  line-height: .95;
-
-}
-
-
-.pantry-message {
-
-  margin: 9px 40px 0 0;
-
-  color: var(--muted);
-
-  font-size: 15px;
-
-  font-style: italic;
-
-}
-
-
-.close-pantry {
-
-  position: absolute;
-
-  top: 16px;
-
-  right: 18px;
-
-  padding: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  font-size: 30px;
-
-  line-height: 1;
-
-}
-
-
-.pantry-items {
-
-  flex: 1;
-
-  overflow-y: auto;
-
-  padding: 4px 22px 20px;
-
-}
-
-
-.empty-pantry {
-
-  padding: 65px 20px;
-
-  text-align: center;
-
-}
-
-
-.empty-pantry h3 {
-
-  margin: 0 0 8px;
-
-  font-size: 31px;
-
-}
-
-
-.empty-pantry p {
-
-  margin: 0;
-
-  color: var(--muted);
-
-  line-height: 1.6;
-
-}
-
-
-.pantry-item {
-
-  padding: 20px 0;
-
-  border-bottom: 1px solid var(--line);
-
-}
-
-
-.pantry-item-top {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-}
-
-
-.pantry-item-number {
-
-  color: var(--muted);
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .15em;
-
-  text-transform: uppercase;
-
-}
-
-
-.pantry-item h3 {
-
-  margin: 3px 0 5px;
-
-  font-size: 25px;
-
-}
-
-
-.pantry-item-size {
-
-  color: var(--muted);
-
-  font-size: 14px;
-
-}
-
-
-.pantry-item-price {
-
-  font-weight: 700;
-
-  white-space: nowrap;
-
-}
-
-
-.pantry-controls {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  margin-top: 14px;
-
-}
-
-
-.qty-control {
-
-  display: flex;
-
-  align-items: center;
-
-  border: 1px solid var(--ink);
-
-}
-
-
-.qty-control button {
-
-  width: 35px;
-
-  height: 33px;
-
-  padding: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  font-size: 18px;
-
-}
-
-
-.qty-control span {
-
-  min-width: 28px;
-
-  text-align: center;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-}
-
-
-.remove-item {
-
-  padding: 0 0 2px;
-
-  border: 0;
-
-  border-bottom: 1px solid var(--muted);
-
-  background: transparent;
-
-  color: var(--muted);
-
-  cursor: pointer;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .1em;
-
-  text-transform: uppercase;
-
-}
-
-
-.pantry-footer {
-
-  padding: 20px 22px 24px;
-
-  border-top: 1px solid var(--ink);
-
-  background: var(--cream);
-
-}
-
-
-.pantry-total {
-
-  display: flex;
-
-  align-items: baseline;
-
-  justify-content: space-between;
-
-  margin-bottom: 16px;
-
-}
-
-
-.pantry-total span {
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .15em;
-
-  text-transform: uppercase;
-
-}
-
-
-.pantry-total strong {
-
-  font-size: 27px;
-
-}
-
-
-.checkout-button {
-
-  width: 100%;
-
-  min-height: 48px;
-
-  border: 1px solid var(--ink);
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-  cursor: pointer;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .13em;
-
-  text-transform: uppercase;
-
-}
-
-
-.keep-shopping {
-
-  width: 100%;
-
-  padding: 14px 10px 7px;
-
-  border: 0;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .13em;
-
-  text-transform: uppercase;
-
-}
-
-
-.checkout-note {
-
-  margin: 10px 0 0;
-
-  color: var(--muted);
-
-  text-align: center;
-
-  font-size: 11px;
-
-  font-style: italic;
-
-}
-
-
-/* TOAST */
-
-
-.toast {
-
-  position: fixed;
-
-  bottom: 25px;
-
-  left: 50%;
-
-  z-index: 200;
-
-  width: min(420px, calc(100vw - 30px));
-
-  padding: 15px 18px;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  background: var(--ink);
-
-  color: var(--cream);
-
-  text-align: center;
-
-  transform: translate(-50%, 30px);
-
-  transition: .25s ease;
-
-  font-size: 14px;
-
-}
-
-
-.toast.show {
-
-  opacity: 1;
-
-  transform: translate(-50%, 0);
-
-}
-
-
-/* TABLET */
-
-
-@media (max-width: 900px) {
-
-
-  .nav-links {
-
-    display: none;
-
-  }
-
-
-  .hero-grid,
-  .feature-grid,
-  .reverse-feature,
-  .story-grid {
-
-    grid-template-columns: 1fr;
-
-  }
-
-
-  .hero-grid {
-
-    gap: 34px;
-
-    text-align: center;
-
-  }
-
-
-  .hero-copy p {
-
-    margin-inline: auto;
-
-  }
-
-
-  .hero-actions {
-
-    justify-content: center;
-
-  }
-
-
-  .hero-logo {
-
-    width: 310px;
-
-  }
-
-
-  .products {
-
-    grid-template-columns: repeat(2, 1fr);
-
-  }
-
-
-  .feature-grid {
-
-    gap: 35px;
-
-  }
-
-
-  .feature-number {
-
-    font-size: 130px;
-
-  }
-
-
-}
-
-
-/* PHONE */
-
-
-@media (max-width: 620px) {
-
-
-  .wrap {
-
-    width: min(94vw, 560px);
-
-  }
-
-
-  .topbar {
-
-    font-size: 8px;
-
-  }
-
-
-  .site-header {
-
-    position: sticky;
-
-  }
-
-
-  .nav {
-
-    min-height: 63px;
-
-    gap: 12px;
-
-  }
-
-
-  .brand {
-
-    font-size: 17px;
-
-    line-height: 1;
-
-  }
-
-
-  .pantry-button {
-
-    padding: 10px 11px;
-
-    font-size: 8px;
-
-  }
-
-
-  .hero {
-
-    padding: 44px 0 50px;
-
-  }
-
-
-  .hero h1 {
-
-    font-size: clamp(50px, 15vw, 72px);
-
-  }
-
-
-  .hero-actions {
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-  }
-
-
-  .collection {
-
-    padding: 55px 0 65px;
-
-  }
-
-
-  .products {
-
-    grid-template-columns: 1fr;
-
-  }
-
-
-  .product-card {
-
-    width: min(470px, 100%);
-
-    margin: 0 auto;
-
-  }
-
-
-  .homepage-feature {
-
-    padding: 55px 0;
-
-  }
-
-
-  .feature-number {
-
-    font-size: 105px;
-
-  }
-
-
-  .feature-copy h2 {
-
-    font-size: 47px;
-
-  }
-
-
-  .story {
-
-    padding: 55px 0;
-
-  }
-
-
-  .value-grid {
-
-    grid-template-columns: 1fr;
-
-  }
-
-
-}
+</body>
+</html>
