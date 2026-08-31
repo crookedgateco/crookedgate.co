@@ -1,234 +1,159 @@
-/* CROOKED GATE PRODUCT CATALOG */
+/* =========================================================
+   CROOKED GATE
+   SHARED SITE JAVASCRIPT
+   ========================================================= */
 
+
+/* =========================================================
+   PRODUCT CATALOG
+   ========================================================= */
 
 const CROOKED_GATE_PRODUCTS = [
 
   {
-
     id: "ranch",
-
     number: "01",
-
     name: "Ranch",
-
-    image: "IMG_5974.jpeg",
-
-    url: "seasonings/ranch/",
-
+    image: "/IMG_5974.jpeg",
+    url: "/seasonings/ranch/",
     description:
       "Good on burgers, fries, potatoes, chicken and vegetables."
-
   },
 
-
   {
-
     id: "poultry-rub",
-
     number: "02",
-
     name: "Poultry Rub",
-
-    image: "IMG_5973.jpeg",
-
-    url: "seasonings/poultry-rub/",
-
+    image: "/IMG_5973.jpeg",
+    url: "/seasonings/poultry-rub/",
     description:
       "Good on chicken, turkey, potatoes and roasted vegetables."
-
   },
 
-
   {
-
     id: "butchers-blend",
-
     number: "03",
-
     name: "Butcher's Blend",
-
-    image: "IMG_5972.jpeg",
-
-    url: "seasonings/butchers-blend/",
-
+    image: "/IMG_5972.jpeg",
+    url: "/seasonings/butchers-blend/",
     description:
       "Good on steak, burgers, pork, potatoes and vegetables."
-
   },
 
-
   {
-
     id: "smokehouse-rub",
-
     number: "04",
-
     name: "Smokehouse Rub",
-
-    image: "IMG_5971.jpeg",
-
-    url: "seasonings/smokehouse-rub/",
-
+    image: "/IMG_5971.jpeg",
+    url: "/seasonings/smokehouse-rub/",
     description:
       "Good on pork, chicken, ribs, potatoes and grilled vegetables."
-
   },
 
-
   {
-
     id: "bbq-rub",
-
     number: "05",
-
     name: "BBQ Rub",
-
-    image: "IMG_5970.jpeg",
-
-    url: "seasonings/bbq-rub/",
-
+    image: "/IMG_5970.jpeg",
+    url: "/seasonings/bbq-rub/",
     description:
       "Good on chicken, pork, burgers, ribs and roasted vegetables."
-
   },
 
-
   {
-
     id: "taco",
-
     number: "06",
-
     name: "Taco",
-
-    image: "IMG_5969.jpeg",
-
-    url: "seasonings/taco/",
-
+    image: "/IMG_5969.jpeg",
+    url: "/seasonings/taco/",
     description:
       "Good in tacos, ground beef, chicken, rice and beans."
-
   },
 
-
   {
-
     id: "fajitas",
-
     number: "07",
-
     name: "Fajitas",
-
-    image: "IMG_5968.jpeg",
-
-    url: "seasonings/fajitas/",
-
+    image: "/IMG_5968.jpeg",
+    url: "/seasonings/fajitas/",
     description:
       "Good with chicken, steak, peppers, onions and rice."
-
   },
 
-
   {
-
     id: "moms-spaghetti",
-
     number: "08",
-
     name: "Mom's Spaghetti",
-
-    image: "IMG_5967.jpeg",
-
-    url: "seasonings/moms-spaghetti/",
-
+    image: "/IMG_5967.jpeg",
+    url: "/seasonings/moms-spaghetti/",
     description:
       "Made for pasta, meat sauce, meatballs and garlic bread."
-
   },
 
-
   {
-
     id: "italian-seasoning",
-
     number: "09",
-
     name: "Italian Seasoning",
-
-    image: "IMG_5966.jpeg",
-
-    url: "seasonings/italian-seasoning/",
-
+    image: "/IMG_5966.jpeg",
+    url: "/seasonings/italian-seasoning/",
     description:
       "Good in pasta, vegetables, chicken, bread and marinades."
-
   },
 
-
   {
-
     id: "garlic-salt",
-
     number: "10",
-
     name: "Garlic Salt",
-
-    image: "IMG_5965.jpeg",
-
-    url: "seasonings/garlic-salt/",
-
+    image: "/IMG_5965.jpeg",
+    url: "/seasonings/garlic-salt/",
     description:
       "Good on potatoes, vegetables, eggs, chicken and everyday cooking."
-
   },
 
-
   {
-
     id: "homestead-blend",
-
     number: "11",
-
     name: "Homestead Blend",
-
-    image: "IMG_5964.jpeg",
-
-    url: "seasonings/homestead-blend/",
-
+    image: "/IMG_5964.jpeg",
+    url: "/seasonings/homestead-blend/",
     description:
       "Good on meat, potatoes, vegetables, soups and everyday meals."
-
   }
 
 ];
 
 
-
-/* PRICES */
-
+/* =========================================================
+   PRICES
+   ========================================================= */
 
 const CROOKED_GATE_SIZES = {
-
   "2 oz": 6,
-
   "8 oz": 20
-
 };
 
 
+/* =========================================================
+   INSTAGRAM
+   TEMPORARY ORDER DESTINATION
+   ========================================================= */
 
-/* CURRENT SIZE SELECTIONS */
+const CROOKED_GATE_INSTAGRAM =
+  "https://www.instagram.com/crookedgate/";
 
+
+/* =========================================================
+   CURRENT SIZE SELECTIONS
+   ========================================================= */
 
 const selectedSizes = {};
 
 
-
-/* CART */
-
+/* =========================================================
+   PANTRY / CART
+   ========================================================= */
 
 let cart = [];
-
 
 try {
 
@@ -244,175 +169,139 @@ try {
 }
 
 
-
-/* PRODUCT GRID */
-
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
 
 function renderProductGrid() {
-
 
   const grid =
     document.getElementById("productGrid");
 
-
   if (!grid) {
-
     return;
-
   }
 
 
   grid.innerHTML =
-    CROOKED_GATE_PRODUCTS.map(product => {
+    CROOKED_GATE_PRODUCTS
+      .map(product => {
+
+        selectedSizes[product.id] =
+          selectedSizes[product.id] || "2 oz";
 
 
-      selectedSizes[product.id] =
-        selectedSizes[product.id] || "2 oz";
+        return `
 
-
-      return `
-
-
-        <article class="product-card">
-
-
-          <a
-            class="product-label-link"
-            href="${product.url}"
-          >
-
-
-            <div class="label-frame">
-
-
-              <img
-                src="${product.image}"
-                alt="Crooked Gate No. ${product.number} ${product.name}"
-              >
-
-
-            </div>
-
-
-          </a>
-
-
-
-          <div class="product-info">
-
-
-            <div class="product-number">
-
-              No. ${product.number}
-
-            </div>
-
+          <article class="product-card">
 
             <a
-              class="product-name"
+              class="product-label-link"
               href="${product.url}"
             >
 
-              ${product.name}
+              <div class="label-frame">
 
-            </a>
-
-
-            <p class="product-description">
-
-              ${product.description}
-
-            </p>
-
-
-            <a
-              class="view-product"
-              href="${product.url}"
-            >
-
-              Explore No. ${product.number} →
-
-            </a>
-
-
-
-            <div class="buy-box">
-
-
-              <span class="choose-label">
-
-                Choose Your Bag
-
-              </span>
-
-
-
-              <div class="size-options">
-
-
-                <button
-                  class="size-button selected"
-                  type="button"
-                  data-product="${product.id}"
-                  data-size="2 oz"
+                <img
+                  src="${product.image}"
+                  alt="Crooked Gate No. ${product.number} ${product.name}"
                 >
-
-                  2 OZ · $6
-
-                </button>
-
-
-                <button
-                  class="size-button"
-                  type="button"
-                  data-product="${product.id}"
-                  data-size="8 oz"
-                >
-
-                  8 OZ · $20
-
-                </button>
-
 
               </div>
 
+            </a>
 
 
-              <button
-                class="add-pantry"
-                type="button"
-                data-add-product="${product.id}"
+            <div class="product-info">
+
+              <div class="product-number">
+                No. ${product.number}
+              </div>
+
+
+              <a
+                class="product-name"
+                href="${product.url}"
               >
+                ${product.name}
+              </a>
 
-                Add to Pantry
 
-              </button>
+              <p class="product-description">
+                ${product.description}
+              </p>
 
+
+              <a
+                class="view-product"
+                href="${product.url}"
+              >
+                Explore No. ${product.number} →
+              </a>
+
+
+              <div class="buy-box">
+
+                <span class="choose-label">
+                  Choose Your Bag
+                </span>
+
+
+                <div class="size-options">
+
+                  <button
+                    class="size-button selected"
+                    type="button"
+                    data-product="${product.id}"
+                    data-size="2 oz"
+                  >
+                    2 OZ · $6
+                  </button>
+
+
+                  <button
+                    class="size-button"
+                    type="button"
+                    data-product="${product.id}"
+                    data-size="8 oz"
+                  >
+                    8 OZ · $20
+                  </button>
+
+                </div>
+
+
+                <button
+                  class="add-pantry"
+                  type="button"
+                  data-add-product="${product.id}"
+                >
+                  Add to Pantry
+                </button>
+
+              </div>
 
             </div>
 
+          </article>
 
-          </div>
+        `;
 
-
-        </article>
-
-
-      `;
-
-
-    }).join("");
-
+      })
+      .join("");
 
 }
 
 
+/* =========================================================
+   SIZE SELECTION
+   ========================================================= */
 
-/* SELECT SIZE */
-
-
-function selectProductSize(productId, size, clickedButton) {
-
+function selectProductSize(
+  productId,
+  size,
+  clickedButton
+) {
 
   selectedSizes[productId] =
     size;
@@ -431,16 +320,17 @@ function selectProductSize(productId, size, clickedButton) {
 
   clickedButton.classList.add("selected");
 
-
 }
 
 
+/* =========================================================
+   ADD PRODUCT TO PANTRY
+   ========================================================= */
 
-/* ADD PRODUCT */
-
-
-function addProductToPantry(productId, size) {
-
+function addProductToPantry(
+  productId,
+  size
+) {
 
   const product =
     CROOKED_GATE_PRODUCTS.find(
@@ -449,9 +339,7 @@ function addProductToPantry(productId, size) {
 
 
   if (!product) {
-
     return;
-
   }
 
 
@@ -476,15 +364,10 @@ function addProductToPantry(productId, size) {
     cart.push({
 
       id: product.id,
-
       number: product.number,
-
       name: product.name,
-
       size,
-
       price,
-
       quantity: 1
 
     });
@@ -504,12 +387,11 @@ function addProductToPantry(productId, size) {
 }
 
 
-
-/* PRODUCT CARD ADD BUTTON */
-
+/* =========================================================
+   PRODUCT ADD BUTTON
+   ========================================================= */
 
 function handleProductAdd(button) {
-
 
   const productId =
     button.dataset.addProduct;
@@ -527,9 +409,7 @@ function handleProductAdd(button) {
 
 
   if (!product) {
-
     return;
-
   }
 
 
@@ -557,32 +437,28 @@ function handleProductAdd(button) {
     `✓ No. ${product.number} ${product.name}, ${size}, added to the pantry.`
   );
 
-
 }
 
 
-
-/* SAVE */
-
+/* =========================================================
+   SAVE PANTRY
+   ========================================================= */
 
 function saveCart() {
-
 
   localStorage.setItem(
     "crookedGatePantry",
     JSON.stringify(cart)
   );
 
-
 }
 
 
-
-/* CART COUNT */
-
+/* =========================================================
+   PANTRY QUANTITY
+   ========================================================= */
 
 function getCartQuantity() {
-
 
   return cart.reduce(
 
@@ -593,65 +469,58 @@ function getCartQuantity() {
 
   );
 
-
 }
 
 
-
-/* PANTRY PERSONALITY */
-
+/* =========================================================
+   PANTRY PERSONALITY
+   ========================================================= */
 
 function getPantryMessage(count) {
 
-
   if (count === 0) {
-
     return "The pantry's empty.";
-
   }
 
 
   if (count === 1) {
-
     return "Good start.";
-
   }
 
 
   if (count < 5) {
-
     return "The pantry's filling up.";
-
   }
 
 
   return "Now we're cooking.";
 
-
 }
 
 
-
-/* RENDER PANTRY */
-
+/* =========================================================
+   RENDER PANTRY
+   ========================================================= */
 
 function renderPantry() {
-
 
   const pantryItems =
     document.getElementById("pantryItems");
 
-
   const cartCount =
     document.getElementById("cartCount");
-
 
   const pantryMessage =
     document.getElementById("pantryMessage");
 
-
   const pantryTotal =
     document.getElementById("pantryTotal");
+
+  const checkoutButton =
+    document.getElementById("checkoutButton");
+
+  const pantryNote =
+    document.querySelector(".pantry-note");
 
 
   const count =
@@ -674,154 +543,126 @@ function renderPantry() {
   }
 
 
-  if (pantryItems) {
+  if (checkoutButton) {
 
+    checkoutButton.textContent =
+      "Message Us to Order →";
+
+  }
+
+
+  if (pantryNote) {
+
+    pantryNote.textContent =
+      "Online checkout is almost here. For now, message us on Instagram to place your order.";
+
+  }
+
+
+  if (pantryItems) {
 
     if (cart.length === 0) {
 
-
       pantryItems.innerHTML = `
-
 
         <div class="empty-pantry">
 
-
           <h3>
-
             The Pantry's Empty
-
           </h3>
 
-
           <p>
-
             Pick a Family Recipe and start stocking the shelves.
-
           </p>
-
 
         </div>
 
-
       `;
-
 
     } else {
 
-
       pantryItems.innerHTML =
-        cart.map((item, index) => `
+        cart
+          .map((item, index) => `
 
+            <div class="pantry-item">
 
-          <div class="pantry-item">
+              <div class="pantry-item-top">
 
+                <div>
 
-            <div class="pantry-item-top">
+                  <div class="pantry-item-number">
+                    No. ${item.number}
+                  </div>
 
+                  <h3>
+                    ${item.name}
+                  </h3>
 
-              <div>
-
-
-                <div class="pantry-item-number">
-
-                  No. ${item.number}
-
-                </div>
-
-
-                <h3>
-
-                  ${item.name}
-
-                </h3>
-
-
-                <div class="pantry-item-size">
-
-                  ${item.size} · $${item.price}
+                  <div class="pantry-item-size">
+                    ${item.size} · $${item.price}
+                  </div>
 
                 </div>
 
 
-              </div>
+                <div class="pantry-item-price">
 
+                  $${(
+                    item.price *
+                    item.quantity
+                  ).toFixed(2)}
 
-
-              <div class="pantry-item-price">
-
-                $${(
-                  item.price *
-                  item.quantity
-                ).toFixed(2)}
+                </div>
 
               </div>
 
 
-            </div>
+              <div class="pantry-controls">
+
+                <div class="qty-control">
+
+                  <button
+                    type="button"
+                    data-cart-minus="${index}"
+                    aria-label="Decrease quantity"
+                  >
+                    −
+                  </button>
 
 
+                  <span>
+                    ${item.quantity}
+                  </span>
 
-            <div class="pantry-controls">
 
+                  <button
+                    type="button"
+                    data-cart-plus="${index}"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
 
-              <div class="qty-control">
+                </div>
 
 
                 <button
+                  class="remove-item"
                   type="button"
-                  data-cart-minus="${index}"
-                  aria-label="Decrease quantity"
+                  data-cart-remove="${index}"
                 >
-
-                  −
-
+                  Remove
                 </button>
-
-
-                <span>
-
-                  ${item.quantity}
-
-                </span>
-
-
-                <button
-                  type="button"
-                  data-cart-plus="${index}"
-                  aria-label="Increase quantity"
-                >
-
-                  +
-
-                </button>
-
 
               </div>
 
-
-
-              <button
-                class="remove-item"
-                type="button"
-                data-cart-remove="${index}"
-              >
-
-                Remove
-
-              </button>
-
-
             </div>
 
-
-          </div>
-
-
-        `).join("");
-
+          `)
+          .join("");
 
     }
-
 
   }
 
@@ -846,21 +687,20 @@ function renderPantry() {
 
   }
 
-
 }
 
 
+/* =========================================================
+   CHANGE QUANTITY
+   ========================================================= */
 
-/* QUANTITY */
-
-
-function changeQuantity(index, amount) {
-
+function changeQuantity(
+  index,
+  amount
+) {
 
   if (!cart[index]) {
-
     return;
-
   }
 
 
@@ -878,21 +718,17 @@ function changeQuantity(index, amount) {
 
   renderPantry();
 
-
 }
 
 
-
-/* REMOVE */
-
+/* =========================================================
+   REMOVE ITEM
+   ========================================================= */
 
 function removeCartItem(index) {
 
-
   if (!cart[index]) {
-
     return;
-
   }
 
 
@@ -903,29 +739,24 @@ function removeCartItem(index) {
 
   renderPantry();
 
-
 }
 
 
-
-/* OPEN PANTRY */
-
+/* =========================================================
+   OPEN PANTRY
+   ========================================================= */
 
 function openPantry() {
 
-
   const drawer =
     document.getElementById("pantryDrawer");
-
 
   const overlay =
     document.getElementById("pantryOverlay");
 
 
   if (!drawer || !overlay) {
-
     return;
-
   }
 
 
@@ -933,38 +764,35 @@ function openPantry() {
 
   overlay.classList.add("open");
 
+
   drawer.setAttribute(
     "aria-hidden",
     "false"
   );
 
+
   document.body.classList.add(
     "pantry-open"
   );
 
-
 }
 
 
-
-/* CLOSE PANTRY */
-
+/* =========================================================
+   CLOSE PANTRY
+   ========================================================= */
 
 function closePantry() {
 
-
   const drawer =
     document.getElementById("pantryDrawer");
-
 
   const overlay =
     document.getElementById("pantryOverlay");
 
 
   if (!drawer || !overlay) {
-
     return;
-
   }
 
 
@@ -972,34 +800,32 @@ function closePantry() {
 
   overlay.classList.remove("open");
 
+
   drawer.setAttribute(
     "aria-hidden",
     "true"
   );
 
+
   document.body.classList.remove(
     "pantry-open"
   );
 
-
 }
 
 
-
-/* BUTTON BUMP */
-
+/* =========================================================
+   PANTRY BUTTON BUMP
+   ========================================================= */
 
 function bumpPantryButton() {
-
 
   const button =
     document.getElementById("pantryButton");
 
 
   if (!button) {
-
     return;
-
   }
 
 
@@ -1011,28 +837,24 @@ function bumpPantryButton() {
 
   button.classList.add("bump");
 
-
 }
 
 
-
-/* TOAST */
-
+/* =========================================================
+   TOAST MESSAGE
+   ========================================================= */
 
 let toastTimer;
 
 
 function showToast(message) {
 
-
   const toast =
     document.getElementById("toast");
 
 
   if (!toast) {
-
     return;
-
   }
 
 
@@ -1053,24 +875,20 @@ function showToast(message) {
 
     }, 1800);
 
-
 }
 
 
+/* =========================================================
+   TEMPORARY INSTAGRAM CHECKOUT
+   ========================================================= */
 
-/* CHECKOUT PLACEHOLDER */
-
-
-function checkoutComingSoon() {
-
+function checkoutViaInstagram() {
 
   if (cart.length === 0) {
-
 
     showToast(
       "The pantry's empty."
     );
-
 
     return;
 
@@ -1082,49 +900,34 @@ function checkoutComingSoon() {
 
 
   if (!button) {
-
     return;
-
   }
 
 
-  const originalText =
-    button.textContent;
-
-
   button.textContent =
-    "Gathering everything from the pantry...";
+    "Opening Instagram...";
 
 
   setTimeout(() => {
 
+    window.location.href =
+      CROOKED_GATE_INSTAGRAM;
 
-    button.textContent =
-      "Checkout Coming Soon";
-
-
-    setTimeout(() => {
-
-      button.textContent =
-        originalText;
-
-    }, 1400);
-
-
-  }, 700);
-
+  }, 400);
 
 }
 
 
-
-/* CLICK HANDLERS */
-
+/* =========================================================
+   GLOBAL CLICK HANDLERS
+   ========================================================= */
 
 document.addEventListener(
   "click",
   event => {
 
+
+    /* SIZE BUTTON */
 
     const sizeButton =
       event.target.closest(
@@ -1133,7 +936,6 @@ document.addEventListener(
 
 
     if (sizeButton) {
-
 
       selectProductSize(
 
@@ -1145,12 +947,12 @@ document.addEventListener(
 
       );
 
-
       return;
 
     }
 
 
+    /* ADD PRODUCT */
 
     const addButton =
       event.target.closest(
@@ -1160,17 +962,16 @@ document.addEventListener(
 
     if (addButton) {
 
-
       handleProductAdd(
         addButton
       );
-
 
       return;
 
     }
 
 
+    /* QUANTITY MINUS */
 
     const minusButton =
       event.target.closest(
@@ -1179,7 +980,6 @@ document.addEventListener(
 
 
     if (minusButton) {
-
 
       changeQuantity(
 
@@ -1191,12 +991,12 @@ document.addEventListener(
 
       );
 
-
       return;
 
     }
 
 
+    /* QUANTITY PLUS */
 
     const plusButton =
       event.target.closest(
@@ -1205,7 +1005,6 @@ document.addEventListener(
 
 
     if (plusButton) {
-
 
       changeQuantity(
 
@@ -1217,12 +1016,12 @@ document.addEventListener(
 
       );
 
-
       return;
 
     }
 
 
+    /* REMOVE */
 
     const removeButton =
       event.target.closest(
@@ -1232,7 +1031,6 @@ document.addEventListener(
 
     if (removeButton) {
 
-
       removeCartItem(
 
         Number(
@@ -1241,17 +1039,20 @@ document.addEventListener(
 
       );
 
+      return;
 
     }
-
 
   }
 );
 
 
+/* =========================================================
+   STATIC BUTTONS
+   ========================================================= */
 
-/* STATIC BUTTONS */
 
+/* OPEN PANTRY */
 
 document
   .getElementById("pantryButton")
@@ -1261,6 +1062,8 @@ document
   );
 
 
+/* CLOSE PANTRY */
+
 document
   .getElementById("closePantryButton")
   ?.addEventListener(
@@ -1268,6 +1071,8 @@ document
     closePantry
   );
 
+
+/* OVERLAY */
 
 document
   .getElementById("pantryOverlay")
@@ -1277,6 +1082,8 @@ document
   );
 
 
+/* KEEP SHOPPING */
+
 document
   .getElementById("keepShoppingButton")
   ?.addEventListener(
@@ -1285,22 +1092,23 @@ document
   );
 
 
+/* TEMPORARY INSTAGRAM ORDER BUTTON */
+
 document
   .getElementById("checkoutButton")
   ?.addEventListener(
     "click",
-    checkoutComingSoon
+    checkoutViaInstagram
   );
 
 
-
-/* ESCAPE KEY */
-
+/* =========================================================
+   ESCAPE KEY
+   ========================================================= */
 
 document.addEventListener(
   "keydown",
   event => {
-
 
     if (event.key === "Escape") {
 
@@ -1308,14 +1116,13 @@ document.addEventListener(
 
     }
 
-
   }
 );
 
 
-
-/* START */
-
+/* =========================================================
+   START
+   ========================================================= */
 
 renderProductGrid();
 
