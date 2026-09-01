@@ -2,10 +2,12 @@ const PRODUCTS = {
   ranch: {
     number: "01",
     name: "Ranch",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "HMVKA6RPGJKGJKVMNUE6TNMV",
+      "8 oz": "QZKG3TLGDOSDVAQONCZDOSBF"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -15,10 +17,12 @@ const PRODUCTS = {
   "poultry-rub": {
     number: "02",
     name: "Poultry Rub",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "PAHVOIQTMK7JVMWN63CFWJAX",
+      "8 oz": "MKL7S3LT7TCC4YP76YFVMVR7"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -28,10 +32,12 @@ const PRODUCTS = {
   "butchers-blend": {
     number: "03",
     name: "Butcher's Blend",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "OJR7QL3NCZ3Y6KS4VXKXVLIN",
+      "8 oz": "WI6NUUMOPYWNOJYPL7MGR27Q"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -41,10 +47,12 @@ const PRODUCTS = {
   "smokehouse-rub": {
     number: "04",
     name: "Smokehouse Rub",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "ZF3N7SUMGYHL3THTAL3LHD42",
+      "8 oz": "46BHBDQJP5TIUELV7J6KHV75"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -54,10 +62,12 @@ const PRODUCTS = {
   "bbq-rub": {
     number: "05",
     name: "BBQ Rub",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "IOSJ25ZOJQD7CHD7PMQZ77TQ",
+      "8 oz": "2XDQ377MXQ6PWAKZTHJAQMVM"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -67,10 +77,12 @@ const PRODUCTS = {
   taco: {
     number: "06",
     name: "Taco",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "2XUXSC7TFSXW6RLOA2FJGLCE",
+      "8 oz": "B3WWWAE5D7CIPR4ZQNH7IOOK"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -80,10 +92,12 @@ const PRODUCTS = {
   fajitas: {
     number: "07",
     name: "Fajitas",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "MLTXV2LL4WJ3JRSNEMGQN732",
+      "8 oz": "MA5LD7OUT6Y6YFOY2DQS6UF3"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -93,10 +107,12 @@ const PRODUCTS = {
   "moms-spaghetti": {
     number: "08",
     name: "Mom's Spaghetti",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "IVB6RUS2O7VISHUB227SJ2X5",
+      "8 oz": "C4BQSKYX6EEKH2Z55I3KJFR7"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -106,10 +122,12 @@ const PRODUCTS = {
   "italian-seasoning": {
     number: "09",
     name: "Italian Seasoning",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "ZVVAUE352SWCGBEDYJTBZDB4",
+      "8 oz": "RRNTWNO7IMBKOGHG23VRZ6IN"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -119,10 +137,12 @@ const PRODUCTS = {
   "garlic-salt": {
     number: "10",
     name: "Garlic Salt",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "YAFNMUGYOKUKGGVUDMYEWHLT",
+      "8 oz": "MJ34RXSYNA2Q3MBNAR3IMWQJ"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -132,10 +152,12 @@ const PRODUCTS = {
   "homestead-blend": {
     number: "11",
     name: "Homestead Blend",
-    prices: {
-      "2 oz": 600,
-      "8 oz": 2000
+
+    catalogObjectIds: {
+      "2 oz": "UI5LHCHDFDIVLOTZQYSP3YHV",
+      "8 oz": "D7XC7EOPHYPPFNTJC5HWNBYC"
     },
+
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -315,8 +337,17 @@ function buildLineItems(items) {
     }
 
 
-    const price =
-      product.prices[size];
+    const catalogObjectId =
+      product.catalogObjectIds[size];
+
+
+    if (!catalogObjectId) {
+
+      throw new Error(
+        "One of the selected products is not available in the Square catalog."
+      );
+
+    }
 
 
     const ounces =
@@ -325,22 +356,11 @@ function buildLineItems(items) {
 
     lineItems.push({
 
-      name:
-        `No. ${product.number} ${product.name}`,
-
-      variation_name:
-        size,
+      catalog_object_id:
+        catalogObjectId,
 
       quantity:
-        String(quantity),
-
-      base_price_money: {
-        amount:
-          price,
-
-        currency:
-          "USD"
-      }
+        String(quantity)
 
     });
 
