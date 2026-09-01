@@ -93,6 +93,22 @@ export default {
     }
 
     try {
+      if (!env.SQUARE_ACCESS_TOKEN) {
+        return jsonResponse(
+          request,
+          { error: "Missing SQUARE_ACCESS_TOKEN." },
+          500
+        );
+      }
+
+      if (!env.SQUARE_LOCATION_ID) {
+        return jsonResponse(
+          request,
+          { error: "Missing SQUARE_LOCATION_ID." },
+          500
+        );
+      }
+
       const body = await request.json();
 
       if (
@@ -117,7 +133,7 @@ export default {
         if (!product) {
           return jsonResponse(
             request,
-            { error: "Invalid product." },
+            { error: `Invalid product: ${item.id}` },
             400
           );
         }
@@ -125,7 +141,7 @@ export default {
         if (!price) {
           return jsonResponse(
             request,
-            { error: "Invalid bag size." },
+            { error: `Invalid bag size: ${item.size}` },
             400
           );
         }
@@ -137,7 +153,7 @@ export default {
         ) {
           return jsonResponse(
             request,
-            { error: "Invalid quantity." },
+            { error: `Invalid quantity: ${item.quantity}` },
             400
           );
         }
@@ -147,8 +163,6 @@ export default {
             `No. ${product.number} ${product.name} - ${item.size}`,
 
           quantity: String(quantity),
-
-          item_type: "ITEM",
 
           base_price_money: {
             amount: price,
@@ -201,16 +215,19 @@ export default {
         await squareResponse.json();
 
       if (!squareResponse.ok) {
-        console.error(
-          "Square checkout error:",
-          JSON.stringify(squareData)
-        );
-
         return jsonResponse(
           request,
           {
             error:
-              "Square could not create the checkout."
+              squareData?.errors?.[0]?.detail ||
+              squareData?.errors?.[0]?.code ||
+              "Square rejected the checkout.",
+
+            squareStatus:
+              squareResponse.status,
+
+            squareErrors:
+              squareData?.errors || []
           },
           502
         );
@@ -224,7 +241,7 @@ export default {
           request,
           {
             error:
-              "Square did not return a checkout link."
+              "Square created a response but returned no checkout URL."
           },
           502
         );
@@ -237,15 +254,11 @@ export default {
     }
 
     catch (error) {
-      console.error(
-        "Checkout Worker error:",
-        error
-      );
-
       return jsonResponse(
         request,
         {
           error:
+            error?.message ||
             "Unable to start checkout."
         },
         500
@@ -253,6 +266,3 @@ export default {
     }
   }
 };
-
-
-// Cloudflare build test
