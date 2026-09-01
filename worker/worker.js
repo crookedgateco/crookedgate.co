@@ -237,6 +237,12 @@ export default {
         );
       }
 
+      const fulfillment =
+        body.fulfillment === "pickup"
+          ? "pickup"
+          : "shipping";
+
+
       const lineItems = [];
 
       let productWeightOz = 0;
@@ -297,76 +303,131 @@ export default {
         });
       }
 
-      const shipping =
-        calculateShipping(
-          productWeightOz
-        );
 
-      if (!shipping) {
-        return jsonResponse(
-          request,
-          {
-            error:
-              "This order is over our 5 lb shipping limit. Please reduce the order size."
-          },
-          400
-        );
+      let shipping = null;
+
+      if (
+        fulfillment === "shipping"
+      ) {
+
+        shipping =
+          calculateShipping(
+            productWeightOz
+          );
+
+        if (!shipping) {
+          return jsonResponse(
+            request,
+            {
+              error:
+                "This order is over our 5 lb shipping limit. Please reduce the order size."
+            },
+            400
+          );
+        }
+
       }
+
+
+      const order = {
+        location_id:
+          env.SQUARE_LOCATION_ID,
+
+        line_items:
+          lineItems,
+
+        pricing_options: {
+          auto_apply_taxes: true
+        }
+      };
+
+
+      if (
+        fulfillment === "shipping"
+      ) {
+
+        order.service_charges = [
+          {
+            name: "Shipping",
+
+            scope: "ORDER",
+
+            calculation_phase:
+              "TOTAL_PHASE",
+
+            taxable: false,
+
+            amount_money: {
+              amount:
+                shipping.amount,
+
+              currency:
+                "USD"
+            }
+          }
+        ];
+
+      }
+
+
+      const checkoutOptions = {
+        ask_for_shipping_address:
+          fulfillment === "shipping",
+
+        allow_tipping:
+          false,
+
+        redirect_url:
+          "https://crookedgate.co/?order=complete"
+      };
+
+
+      if (
+        fulfillment === "pickup"
+      ) {
+
+        checkoutOptions.custom_fields = [
+          {
+            title:
+              "Pickup phone number"
+          },
+          {
+            title:
+              "Pickup email address"
+          }
+        ];
+
+      }
+
+
+      const orderDescription =
+        fulfillment === "pickup"
+          ? "Crooked Gate Seasonings - Local Pickup - Lincoln, CA"
+          : "Crooked Gate Seasonings - Shipped Order";
+
+
+      const paymentNote =
+        fulfillment === "pickup"
+          ? "LOCAL PICKUP - LINCOLN, CA. Contact customer when order is ready and provide pickup location and instructions."
+          : "Crooked Gate Seasonings website order - SHIP";
+
 
       const squareRequest = {
         idempotency_key:
           crypto.randomUUID(),
 
         description:
-          "Crooked Gate Seasonings website order",
+          orderDescription,
 
-        order: {
-          location_id:
-            env.SQUARE_LOCATION_ID,
+        order,
 
-          line_items:
-            lineItems,
-
-          service_charges: [
-            {
-              name: "Shipping",
-
-              scope: "ORDER",
-
-              calculation_phase:
-                "TOTAL_PHASE",
-
-              taxable: false,
-
-              amount_money: {
-                amount:
-                  shipping.amount,
-
-                currency:
-                  "USD"
-              }
-            }
-          ],
-
-          pricing_options: {
-            auto_apply_taxes: true
-          }
-        },
-
-        checkout_options: {
-          ask_for_shipping_address:
-            true,
-
-          allow_tipping:
-            false,
-
-          redirect_url:
-            "https://crookedgate.co/?order=complete"
-        },
+        checkout_options:
+          checkoutOptions,
 
         payment_note:
-          "Crooked Gate Seasonings website order"
+          paymentNote
       };
+
 
       const squareResponse =
         await fetch(
@@ -392,6 +453,7 @@ export default {
           }
         );
 
+
       let squareData = {};
 
       try {
@@ -406,13 +468,15 @@ export default {
         );
       }
 
+
       if (
         !squareResponse.ok
       ) {
         console.error(
           "Square checkout error:",
           squareResponse.status,
-          squareData?.errors || squareData
+          squareData?.errors ||
+          squareData
         );
 
         return jsonResponse(
@@ -425,10 +489,12 @@ export default {
         );
       }
 
+
       const checkoutUrl =
         squareData
           ?.payment_link
           ?.url;
+
 
       if (!checkoutUrl) {
         console.error(
@@ -445,6 +511,7 @@ export default {
           502
         );
       }
+
 
       return jsonResponse(
         request,
