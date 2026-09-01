@@ -346,7 +346,11 @@ export default {
                   "USD"
               }
             }
-          ]
+          ],
+
+          pricing_options: {
+            auto_apply_taxes: true
+          }
         },
 
         checkout_options: {
