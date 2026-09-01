@@ -125,6 +125,11 @@ const CROOKED_GATE_PRODUCTS = [
 
 /* =========================================================
    PRICES
+   DISPLAY ONLY
+
+   IMPORTANT:
+   The authoritative checkout prices live inside the
+   Cloudflare Worker, not in the browser.
    ========================================================= */
 
 const CROOKED_GATE_SIZES = {
@@ -134,12 +139,11 @@ const CROOKED_GATE_SIZES = {
 
 
 /* =========================================================
-   INSTAGRAM
-   TEMPORARY ORDER DESTINATION
+   SQUARE CHECKOUT WORKER
    ========================================================= */
 
-const CROOKED_GATE_INSTAGRAM =
-  "https://www.instagram.com/crookedgate/";
+const CROOKED_GATE_CHECKOUT_URL =
+  "https://crooked-gate-checkout.mgruttemeyer.workers.dev/checkout";
 
 
 /* =========================================================
@@ -546,7 +550,10 @@ function renderPantry() {
   if (checkoutButton) {
 
     checkoutButton.textContent =
-      "Message Us to Order →";
+      "Head to Checkout →";
+
+    checkoutButton.disabled =
+      cart.length === 0;
 
   }
 
@@ -554,7 +561,7 @@ function renderPantry() {
   if (pantryNote) {
 
     pantryNote.textContent =
-      "Online checkout is almost here. For now, message us on Instagram to place your order.";
+      "Secure checkout powered by Square.";
 
   }
 
@@ -879,10 +886,10 @@ function showToast(message) {
 
 
 /* =========================================================
-   TEMPORARY INSTAGRAM CHECKOUT
+   SQUARE CHECKOUT
    ========================================================= */
 
-function checkoutViaInstagram() {
+async function checkoutWithSquare() {
 
   if (cart.length === 0) {
 
@@ -904,16 +911,133 @@ function checkoutViaInstagram() {
   }
 
 
+  const originalText =
+    button.textContent;
+
+
+  button.disabled = true;
+
   button.textContent =
-    "Opening Instagram...";
+    "Opening Secure Checkout...";
 
 
-  setTimeout(() => {
+  try {
+
+    const response =
+      await fetch(
+        CROOKED_GATE_CHECKOUT_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            items:
+              cart.map(item => ({
+
+                id: item.id,
+                size: item.size,
+                quantity: item.quantity
+
+              }))
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.checkoutUrl
+    ) {
+
+      throw new Error(
+        data.error ||
+        "Checkout could not be created."
+      );
+
+    }
+
 
     window.location.href =
-      CROOKED_GATE_INSTAGRAM;
+      data.checkoutUrl;
 
-  }, 400);
+  } catch (error) {
+
+    console.error(
+      "Crooked Gate checkout error:",
+      error
+    );
+
+
+    button.disabled = false;
+
+    button.textContent =
+      originalText;
+
+
+    showToast(
+      "Checkout couldn't start. Try again."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ORDER COMPLETE RETURN
+   ========================================================= */
+
+function handleOrderCompleteReturn() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  if (
+    params.get("order") !==
+    "complete"
+  ) {
+
+    return;
+
+  }
+
+
+  cart = [];
+
+  saveCart();
+
+  renderPantry();
+
+
+  showToast(
+    "Order placed. Thank you!"
+  );
+
+
+  const cleanUrl =
+    window.location.pathname +
+    window.location.hash;
+
+
+  window.history.replaceState(
+    {},
+    document.title,
+    cleanUrl
+  );
 
 }
 
@@ -1092,13 +1216,13 @@ document
   );
 
 
-/* TEMPORARY INSTAGRAM ORDER BUTTON */
+/* SQUARE CHECKOUT */
 
 document
   .getElementById("checkoutButton")
   ?.addEventListener(
     "click",
-    checkoutViaInstagram
+    checkoutWithSquare
   );
 
 
@@ -1127,3 +1251,5 @@ document.addEventListener(
 renderProductGrid();
 
 renderPantry();
+
+handleOrderCompleteReturn();
