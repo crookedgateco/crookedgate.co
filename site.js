@@ -127,9 +127,8 @@ const CROOKED_GATE_PRODUCTS = [
    PRICES
    DISPLAY ONLY
 
-   IMPORTANT:
-   The authoritative checkout prices live inside the
-   Cloudflare Worker, not in the browser.
+   REAL CHECKOUT PRICES ARE CONTROLLED BY THE
+   CLOUDFLARE WORKER.
    ========================================================= */
 
 const CROOKED_GATE_SIZES = {
@@ -880,7 +879,7 @@ function showToast(message) {
 
       toast.classList.remove("show");
 
-    }, 1800);
+    }, 4000);
 
 }
 
@@ -951,18 +950,36 @@ async function checkoutWithSquare() {
       );
 
 
-    const data =
-      await response.json();
+    let data = {};
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch {
+
+      throw new Error(
+        `Checkout server returned HTTP ${response.status}.`
+      );
+
+    }
 
 
-    if (
-      !response.ok ||
-      !data.checkoutUrl
-    ) {
+    if (!response.ok) {
 
       throw new Error(
         data.error ||
-        "Checkout could not be created."
+        `Checkout failed with HTTP ${response.status}.`
+      );
+
+    }
+
+
+    if (!data.checkoutUrl) {
+
+      throw new Error(
+        "Square did not return a checkout link."
       );
 
     }
@@ -986,7 +1003,8 @@ async function checkoutWithSquare() {
 
 
     showToast(
-      "Checkout couldn't start. Try again."
+      error.message ||
+      "Checkout couldn't start."
     );
 
   }
