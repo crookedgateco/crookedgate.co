@@ -153,6 +153,141 @@ const selectedSizes = {};
 
 
 /* =========================================================
+   FULFILLMENT METHOD
+   ========================================================= */
+
+let fulfillmentMethod =
+  localStorage.getItem(
+    "crookedGateFulfillment"
+  ) || "shipping";
+
+
+if (
+  fulfillmentMethod !== "shipping" &&
+  fulfillmentMethod !== "pickup"
+) {
+
+  fulfillmentMethod =
+    "shipping";
+
+}
+
+
+/* =========================================================
+   FULFILLMENT STYLES
+   ========================================================= */
+
+function ensureFulfillmentStyles() {
+
+  if (
+    document.getElementById(
+      "crookedGateFulfillmentStyles"
+    )
+  ) {
+    return;
+  }
+
+
+  const style =
+    document.createElement("style");
+
+
+  style.id =
+    "crookedGateFulfillmentStyles";
+
+
+  style.textContent = `
+
+    .cg-fulfillment {
+      margin: 0 0 24px;
+      padding: 20px;
+      border: 2px solid #17140f;
+      background: #f2eadc;
+      color: #17140f;
+    }
+
+    .cg-fulfillment-title {
+      margin: 0 0 14px;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 1.35rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .cg-fulfillment-option {
+      display: block;
+      margin: 0 0 12px;
+      padding: 15px;
+      border: 1px solid rgba(23, 20, 15, 0.35);
+      cursor: pointer;
+    }
+
+    .cg-fulfillment-option:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .cg-fulfillment-option.selected {
+      border: 2px solid #17140f;
+      background: rgba(23, 20, 15, 0.06);
+    }
+
+    .cg-fulfillment-option-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .cg-fulfillment-option input {
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+
+    .cg-fulfillment-name {
+      display: block;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .cg-fulfillment-free {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .cg-fulfillment-description {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .cg-pickup-details {
+      margin-top: 14px;
+      padding: 14px;
+      border-top: 1px solid rgba(23, 20, 15, 0.35);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .cg-pickup-details strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+  `;
+
+
+  document.head.appendChild(
+    style
+  );
+
+}
+
+
+/* =========================================================
    PANTRY / CART
    ========================================================= */
 
@@ -502,6 +637,168 @@ function getPantryMessage(count) {
 
 
 /* =========================================================
+   FULFILLMENT HTML
+   ========================================================= */
+
+function getFulfillmentHtml() {
+
+  const shippingSelected =
+    fulfillmentMethod === "shipping";
+
+
+  const pickupSelected =
+    fulfillmentMethod === "pickup";
+
+
+  return `
+
+    <div class="cg-fulfillment">
+
+      <h3 class="cg-fulfillment-title">
+        Delivery Method
+      </h3>
+
+
+      <label
+        class="cg-fulfillment-option ${
+          shippingSelected
+            ? "selected"
+            : ""
+        }"
+      >
+
+        <span class="cg-fulfillment-option-top">
+
+          <input
+            type="radio"
+            name="crooked-gate-fulfillment"
+            value="shipping"
+            data-fulfillment-method="shipping"
+            ${
+              shippingSelected
+                ? "checked"
+                : ""
+            }
+          >
+
+          <span>
+
+            <span class="cg-fulfillment-name">
+              Ship My Order
+            </span>
+
+            <span class="cg-fulfillment-description">
+              Shipping is based on order weight and will be shown at checkout.
+            </span>
+
+          </span>
+
+        </span>
+
+      </label>
+
+
+      <label
+        class="cg-fulfillment-option ${
+          pickupSelected
+            ? "selected"
+            : ""
+        }"
+      >
+
+        <span class="cg-fulfillment-option-top">
+
+          <input
+            type="radio"
+            name="crooked-gate-fulfillment"
+            value="pickup"
+            data-fulfillment-method="pickup"
+            ${
+              pickupSelected
+                ? "checked"
+                : ""
+            }
+          >
+
+          <span>
+
+            <span class="cg-fulfillment-name">
+              Local Pickup - Lincoln, CA
+              <span class="cg-fulfillment-free">
+                FREE
+              </span>
+            </span>
+
+            <span class="cg-fulfillment-description">
+              Free local pickup is available in Lincoln, California.
+            </span>
+
+          </span>
+
+        </span>
+
+
+        ${
+          pickupSelected
+            ? `
+
+              <span class="cg-pickup-details">
+
+                <strong>
+                  Pickup Details
+                </strong>
+
+                We'll contact you when your order is ready and provide the pickup location and instructions.
+
+                <br><br>
+
+                Please be sure to include a valid phone number and email address with your order so we can contact you about pickup.
+
+              </span>
+
+            `
+            : ""
+        }
+
+      </label>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SET FULFILLMENT METHOD
+   ========================================================= */
+
+function setFulfillmentMethod(method) {
+
+  if (
+    method !== "shipping" &&
+    method !== "pickup"
+  ) {
+    return;
+  }
+
+
+  fulfillmentMethod =
+    method;
+
+
+  localStorage.setItem(
+    "crookedGateFulfillment",
+    fulfillmentMethod
+  );
+
+
+  renderPantry();
+
+}
+
+
+/* =========================================================
    RENDER PANTRY
    ========================================================= */
 
@@ -549,7 +846,9 @@ function renderPantry() {
   if (checkoutButton) {
 
     checkoutButton.textContent =
-      "Head to Checkout →";
+      fulfillmentMethod === "pickup"
+        ? "Continue to Pickup Checkout →"
+        : "Head to Checkout →";
 
     checkoutButton.disabled =
       cart.length === 0;
@@ -560,7 +859,9 @@ function renderPantry() {
   if (pantryNote) {
 
     pantryNote.textContent =
-      "Secure checkout powered by Square.";
+      fulfillmentMethod === "pickup"
+        ? "Free local pickup in Lincoln, CA. Secure checkout powered by Square."
+        : "Secure checkout powered by Square.";
 
   }
 
@@ -587,7 +888,7 @@ function renderPantry() {
 
     } else {
 
-      pantryItems.innerHTML =
+      const itemsHtml =
         cart
           .map((item, index) => `
 
@@ -667,6 +968,11 @@ function renderPantry() {
 
           `)
           .join("");
+
+
+      pantryItems.innerHTML =
+        getFulfillmentHtml() +
+        itemsHtml;
 
     }
 
@@ -1107,7 +1413,9 @@ async function checkoutWithSquare() {
   button.disabled = true;
 
   button.textContent =
-    "Opening Secure Checkout...";
+    fulfillmentMethod === "pickup"
+      ? "Opening Pickup Checkout..."
+      : "Opening Secure Checkout...";
 
 
   try {
@@ -1124,6 +1432,9 @@ async function checkoutWithSquare() {
           },
 
           body: JSON.stringify({
+
+            fulfillment:
+              fulfillmentMethod,
 
             items:
               cart.map(item => ({
@@ -1256,7 +1567,7 @@ function handleOrderCompleteReturn() {
 
 
 /* =========================================================
-   GLOBAL CLICK HANDLERS
+   GLOBAL CLICK / CHANGE HANDLERS
    ========================================================= */
 
 document.addEventListener(
@@ -1384,6 +1695,29 @@ document.addEventListener(
 );
 
 
+document.addEventListener(
+  "change",
+  event => {
+
+    const fulfillmentInput =
+      event.target.closest(
+        "[data-fulfillment-method]"
+      );
+
+
+    if (!fulfillmentInput) {
+      return;
+    }
+
+
+    setFulfillmentMethod(
+      fulfillmentInput.dataset.fulfillmentMethod
+    );
+
+  }
+);
+
+
 /* =========================================================
    STATIC BUTTONS
    ========================================================= */
@@ -1460,6 +1794,8 @@ document.addEventListener(
 /* =========================================================
    START
    ========================================================= */
+
+ensureFulfillmentStyles();
 
 renderProductGrid();
 
