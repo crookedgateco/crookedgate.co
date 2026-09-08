@@ -1557,21 +1557,43 @@ function collectCaliforniaShippingAddress() {
           >
 
             <div
-              class="cg-shipping-field full"
+              class="cg-shipping-field"
             >
 
               <label
-                for="cgShippingName"
+                for="cgShippingFirstName"
               >
-                Full Name
+                First Name
               </label>
 
               <input
-                id="cgShippingName"
+                id="cgShippingFirstName"
                 type="text"
-                autocomplete="name"
+                autocomplete="given-name"
                 value="${escapeShippingValue(
-                  saved.name
+                  saved.firstName
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label
+                for="cgShippingLastName"
+              >
+                Last Name
+              </label>
+
+              <input
+                id="cgShippingLastName"
+                type="text"
+                autocomplete="family-name"
+                value="${escapeShippingValue(
+                  saved.lastName
                 )}"
               >
 
@@ -1829,10 +1851,18 @@ function collectCaliforniaShippingAddress() {
 
             const address = {
 
-              name:
+              firstName:
                 backdrop
                   .querySelector(
-                    "#cgShippingName"
+                    "#cgShippingFirstName"
+                  )
+                  .value
+                  .trim(),
+
+              lastName:
+                backdrop
+                  .querySelector(
+                    "#cgShippingLastName"
                   )
                   .value
                   .trim(),
@@ -1895,7 +1925,8 @@ function collectCaliforniaShippingAddress() {
 
 
             if (
-              !address.name ||
+              !address.firstName ||
+              !address.lastName ||
               !address.email ||
               !address.phone ||
               !address.addressLine1 ||
