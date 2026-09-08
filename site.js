@@ -174,7 +174,7 @@ if (
 
 
 /* =========================================================
-   FULFILLMENT STYLES
+   FULFILLMENT / SHIPPING STYLES
    ========================================================= */
 
 function ensureFulfillmentStyles() {
@@ -277,6 +277,143 @@ function ensureFulfillmentStyles() {
       margin-bottom: 5px;
     }
 
+    .cg-shipping-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      background: rgba(23, 20, 15, 0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .cg-shipping-modal {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow-y: auto;
+      box-sizing: border-box;
+      background: #f2eadc;
+      color: #17140f;
+      border: 3px solid #17140f;
+      padding: 28px 22px;
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.42);
+    }
+
+    .cg-shipping-modal h2 {
+      margin: 0 0 10px;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .cg-shipping-intro {
+      margin: 0 0 20px;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.5;
+    }
+
+    .cg-shipping-notice {
+      margin: 0 0 20px;
+      padding: 12px 14px;
+      border: 2px solid #17140f;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .cg-shipping-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .cg-shipping-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cg-shipping-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .cg-shipping-field label {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .cg-shipping-field input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #17140f;
+      border-radius: 0;
+      background: #fffdf8;
+      color: #17140f;
+      font: inherit;
+    }
+
+    .cg-shipping-state {
+      padding: 12px;
+      border: 1px solid #17140f;
+      background: rgba(23, 20, 15, 0.07);
+      font-weight: 700;
+    }
+
+    .cg-shipping-error {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #17140f;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .cg-shipping-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .cg-shipping-actions button {
+      padding: 14px 16px;
+      border: 2px solid #17140f;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .cg-shipping-back {
+      background: transparent;
+      color: #17140f;
+    }
+
+    .cg-shipping-continue {
+      flex: 1;
+      background: #17140f;
+      color: #f2eadc;
+    }
+
+    @media (max-width: 560px) {
+
+      .cg-shipping-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cg-shipping-field.full {
+        grid-column: auto;
+      }
+
+      .cg-shipping-actions {
+        flex-direction: column;
+      }
+
+    }
+
   `;
 
 
@@ -293,11 +430,14 @@ function ensureFulfillmentStyles() {
 
 let cart = [];
 
+
 try {
 
   cart =
     JSON.parse(
-      localStorage.getItem("crookedGatePantry")
+      localStorage.getItem(
+        "crookedGatePantry"
+      )
     ) || [];
 
 } catch {
@@ -314,7 +454,10 @@ try {
 function renderProductGrid() {
 
   const grid =
-    document.getElementById("productGrid");
+    document.getElementById(
+      "productGrid"
+    );
+
 
   if (!grid) {
     return;
@@ -326,7 +469,8 @@ function renderProductGrid() {
       .map(product => {
 
         selectedSizes[product.id] =
-          selectedSizes[product.id] || "2 oz";
+          selectedSizes[product.id] ||
+          "2 oz";
 
 
         return `
@@ -451,12 +595,16 @@ function selectProductSize(
     )
     .forEach(button => {
 
-      button.classList.remove("selected");
+      button.classList.remove(
+        "selected"
+      );
 
     });
 
 
-  clickedButton.classList.add("selected");
+  clickedButton.classList.add(
+    "selected"
+  );
 
 }
 
@@ -472,7 +620,8 @@ function addProductToPantry(
 
   const product =
     CROOKED_GATE_PRODUCTS.find(
-      item => item.id === productId
+      item =>
+        item.id === productId
     );
 
 
@@ -536,7 +685,8 @@ function handleProductAdd(button) {
 
 
   const size =
-    selectedSizes[productId] || "2 oz";
+    selectedSizes[productId] ||
+    "2 oz";
 
 
   const product =
@@ -555,7 +705,10 @@ function handleProductAdd(button) {
     button.textContent;
 
 
-  button.classList.add("added");
+  button.classList.add(
+    "added"
+  );
+
 
   button.textContent =
     "✓ Added to Pantry";
@@ -563,7 +716,9 @@ function handleProductAdd(button) {
 
   setTimeout(() => {
 
-    button.classList.remove("added");
+    button.classList.remove(
+      "added"
+    );
 
     button.textContent =
       originalText;
@@ -643,11 +798,13 @@ function getPantryMessage(count) {
 function getFulfillmentHtml() {
 
   const shippingSelected =
-    fulfillmentMethod === "shipping";
+    fulfillmentMethod ===
+    "shipping";
 
 
   const pickupSelected =
-    fulfillmentMethod === "pickup";
+    fulfillmentMethod ===
+    "pickup";
 
 
   return `
@@ -688,7 +845,7 @@ function getFulfillmentHtml() {
             </span>
 
             <span class="cg-fulfillment-description">
-              Shipping is based on order weight and will be shown at checkout.
+              California shipping only. Shipping is based on order weight.
             </span>
 
           </span>
@@ -724,9 +881,11 @@ function getFulfillmentHtml() {
 
             <span class="cg-fulfillment-name">
               Local Pickup - Lincoln, CA
+
               <span class="cg-fulfillment-free">
                 FREE
               </span>
+
             </span>
 
             <span class="cg-fulfillment-description">
@@ -748,11 +907,7 @@ function getFulfillmentHtml() {
                   Pickup Details
                 </strong>
 
-                We'll contact you when your order is ready and provide the pickup location and instructions.
-
-                <br><br>
-
-                Please be sure to include a valid phone number and email address with your order so we can contact you about pickup.
+                Please include a valid phone number and email address with your order so we can contact you about pickup. Orders are usually ready within 48 hours.
 
               </span>
 
@@ -805,22 +960,34 @@ function setFulfillmentMethod(method) {
 function renderPantry() {
 
   const pantryItems =
-    document.getElementById("pantryItems");
+    document.getElementById(
+      "pantryItems"
+    );
 
   const cartCount =
-    document.getElementById("cartCount");
+    document.getElementById(
+      "cartCount"
+    );
 
   const pantryMessage =
-    document.getElementById("pantryMessage");
+    document.getElementById(
+      "pantryMessage"
+    );
 
   const pantryTotal =
-    document.getElementById("pantryTotal");
+    document.getElementById(
+      "pantryTotal"
+    );
 
   const checkoutButton =
-    document.getElementById("checkoutButton");
+    document.getElementById(
+      "checkoutButton"
+    );
 
   const pantryNote =
-    document.querySelector(".pantry-note");
+    document.querySelector(
+      ".pantry-note"
+    );
 
 
   const count =
@@ -846,9 +1013,11 @@ function renderPantry() {
   if (checkoutButton) {
 
     checkoutButton.textContent =
-      fulfillmentMethod === "pickup"
+      fulfillmentMethod ===
+      "pickup"
         ? "Continue to Pickup Checkout →"
         : "Head to Checkout →";
+
 
     checkoutButton.disabled =
       cart.length === 0;
@@ -859,16 +1028,19 @@ function renderPantry() {
   if (pantryNote) {
 
     pantryNote.textContent =
-      fulfillmentMethod === "pickup"
+      fulfillmentMethod ===
+      "pickup"
         ? "Free local pickup in Lincoln, CA. Secure checkout powered by Square."
-        : "Secure checkout powered by Square.";
+        : "California shipping only. Secure checkout powered by Square.";
 
   }
 
 
   if (pantryItems) {
 
-    if (cart.length === 0) {
+    if (
+      cart.length === 0
+    ) {
 
       pantryItems.innerHTML = `
 
@@ -890,7 +1062,8 @@ function renderPantry() {
 
       const itemsHtml =
         cart
-          .map((item, index) => `
+          .map(
+            (item, index) => `
 
             <div class="pantry-item">
 
@@ -966,7 +1139,8 @@ function renderPantry() {
 
             </div>
 
-          `)
+          `
+          )
           .join("");
 
 
@@ -1016,12 +1190,18 @@ function changeQuantity(
   }
 
 
-  cart[index].quantity += amount;
+  cart[index].quantity +=
+    amount;
 
 
-  if (cart[index].quantity <= 0) {
+  if (
+    cart[index].quantity <= 0
+  ) {
 
-    cart.splice(index, 1);
+    cart.splice(
+      index,
+      1
+    );
 
   }
 
@@ -1044,7 +1224,10 @@ function removeCartItem(index) {
   }
 
 
-  cart.splice(index, 1);
+  cart.splice(
+    index,
+    1
+  );
 
 
   saveCart();
@@ -1061,20 +1244,31 @@ function removeCartItem(index) {
 function openPantry() {
 
   const drawer =
-    document.getElementById("pantryDrawer");
+    document.getElementById(
+      "pantryDrawer"
+    );
 
   const overlay =
-    document.getElementById("pantryOverlay");
+    document.getElementById(
+      "pantryOverlay"
+    );
 
 
-  if (!drawer || !overlay) {
+  if (
+    !drawer ||
+    !overlay
+  ) {
     return;
   }
 
 
-  drawer.classList.add("open");
+  drawer.classList.add(
+    "open"
+  );
 
-  overlay.classList.add("open");
+  overlay.classList.add(
+    "open"
+  );
 
 
   drawer.setAttribute(
@@ -1097,20 +1291,31 @@ function openPantry() {
 function closePantry() {
 
   const drawer =
-    document.getElementById("pantryDrawer");
+    document.getElementById(
+      "pantryDrawer"
+    );
 
   const overlay =
-    document.getElementById("pantryOverlay");
+    document.getElementById(
+      "pantryOverlay"
+    );
 
 
-  if (!drawer || !overlay) {
+  if (
+    !drawer ||
+    !overlay
+  ) {
     return;
   }
 
 
-  drawer.classList.remove("open");
+  drawer.classList.remove(
+    "open"
+  );
 
-  overlay.classList.remove("open");
+  overlay.classList.remove(
+    "open"
+  );
 
 
   drawer.setAttribute(
@@ -1133,7 +1338,9 @@ function closePantry() {
 function bumpPantryButton() {
 
   const button =
-    document.getElementById("pantryButton");
+    document.getElementById(
+      "pantryButton"
+    );
 
 
   if (!button) {
@@ -1141,13 +1348,17 @@ function bumpPantryButton() {
   }
 
 
-  button.classList.remove("bump");
+  button.classList.remove(
+    "bump"
+  );
 
 
   void button.offsetWidth;
 
 
-  button.classList.add("bump");
+  button.classList.add(
+    "bump"
+  );
 
 }
 
@@ -1162,7 +1373,9 @@ let toastTimer;
 function showToast(message) {
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
 
   if (!toast) {
@@ -1174,18 +1387,562 @@ function showToast(message) {
     message;
 
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
 
-  clearTimeout(toastTimer);
+  clearTimeout(
+    toastTimer
+  );
 
 
   toastTimer =
     setTimeout(() => {
 
-      toast.classList.remove("show");
+      toast.classList.remove(
+        "show"
+      );
 
     }, 4000);
+
+}
+
+
+/* =========================================================
+   SHIPPING ADDRESS
+   CALIFORNIA ONLY
+   ========================================================= */
+
+function escapeShippingValue(value) {
+
+  return String(
+    value || ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    );
+
+}
+
+
+function getSavedShippingAddress() {
+
+  try {
+
+    return JSON.parse(
+      sessionStorage.getItem(
+        "crookedGateShippingAddress"
+      ) || "{}"
+    );
+
+  } catch {
+
+    return {};
+
+  }
+
+}
+
+
+function saveShippingAddress(
+  address
+) {
+
+  sessionStorage.setItem(
+    "crookedGateShippingAddress",
+    JSON.stringify(address)
+  );
+
+}
+
+
+function isCaliforniaZip(
+  postalCode
+) {
+
+  if (
+    !/^\d{5}(-\d{4})?$/.test(
+      postalCode
+    )
+  ) {
+    return false;
+  }
+
+
+  const zip =
+    Number(
+      postalCode.slice(
+        0,
+        5
+      )
+    );
+
+
+  return (
+    zip >= 90001 &&
+    zip <= 96162
+  );
+
+}
+
+
+function collectCaliforniaShippingAddress() {
+
+  return new Promise(
+    resolve => {
+
+      const saved =
+        getSavedShippingAddress();
+
+
+      const backdrop =
+        document.createElement(
+          "div"
+        );
+
+
+      backdrop.className =
+        "cg-shipping-backdrop";
+
+
+      backdrop.innerHTML = `
+
+        <div
+          class="cg-shipping-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cgShippingTitle"
+        >
+
+          <h2
+            id="cgShippingTitle"
+          >
+            Shipping Address
+          </h2>
+
+
+          <p
+            class="cg-shipping-intro"
+          >
+            Enter the address where you'd like your Crooked Gate order shipped.
+          </p>
+
+
+          <div
+            class="cg-shipping-notice"
+          >
+            Crooked Gate currently ships only to California addresses.
+          </div>
+
+
+          <div
+            class="cg-shipping-grid"
+          >
+
+            <div
+              class="cg-shipping-field full"
+            >
+
+              <label
+                for="cgShippingName"
+              >
+                Full Name
+              </label>
+
+              <input
+                id="cgShippingName"
+                type="text"
+                autocomplete="name"
+                value="${escapeShippingValue(
+                  saved.name
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label
+                for="cgShippingEmail"
+              >
+                Email
+              </label>
+
+              <input
+                id="cgShippingEmail"
+                type="email"
+                autocomplete="email"
+                value="${escapeShippingValue(
+                  saved.email
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label
+                for="cgShippingPhone"
+              >
+                Phone
+              </label>
+
+              <input
+                id="cgShippingPhone"
+                type="tel"
+                autocomplete="tel"
+                value="${escapeShippingValue(
+                  saved.phone
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field full"
+            >
+
+              <label
+                for="cgShippingAddress1"
+              >
+                Street Address
+              </label>
+
+              <input
+                id="cgShippingAddress1"
+                type="text"
+                autocomplete="address-line1"
+                value="${escapeShippingValue(
+                  saved.addressLine1
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field full"
+            >
+
+              <label
+                for="cgShippingAddress2"
+              >
+                Apt, Suite, Unit
+                (Optional)
+              </label>
+
+              <input
+                id="cgShippingAddress2"
+                type="text"
+                autocomplete="address-line2"
+                value="${escapeShippingValue(
+                  saved.addressLine2
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label
+                for="cgShippingCity"
+              >
+                City
+              </label>
+
+              <input
+                id="cgShippingCity"
+                type="text"
+                autocomplete="address-level2"
+                value="${escapeShippingValue(
+                  saved.city
+                )}"
+              >
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label>
+                State
+              </label>
+
+              <div
+                class="cg-shipping-state"
+              >
+                California (CA)
+              </div>
+
+            </div>
+
+
+            <div
+              class="cg-shipping-field"
+            >
+
+              <label
+                for="cgShippingZip"
+              >
+                ZIP Code
+              </label>
+
+              <input
+                id="cgShippingZip"
+                type="text"
+                inputmode="numeric"
+                autocomplete="postal-code"
+                value="${escapeShippingValue(
+                  saved.postalCode
+                )}"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="cgShippingError"
+            class="cg-shipping-error"
+            aria-live="polite"
+          ></div>
+
+
+          <div
+            class="cg-shipping-actions"
+          >
+
+            <button
+              id="cgShippingBack"
+              class="cg-shipping-back"
+              type="button"
+            >
+              Back
+            </button>
+
+
+            <button
+              id="cgShippingContinue"
+              class="cg-shipping-continue"
+              type="button"
+            >
+              Continue to Secure Checkout →
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      document.body.appendChild(
+        backdrop
+      );
+
+
+      const previousOverflow =
+        document.body.style.overflow;
+
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      const close =
+        result => {
+
+          backdrop.remove();
+
+          document.body.style.overflow =
+            previousOverflow;
+
+          resolve(result);
+
+        };
+
+
+      backdrop
+        .querySelector(
+          "#cgShippingBack"
+        )
+        .addEventListener(
+          "click",
+          () => {
+
+            close(null);
+
+          }
+        );
+
+
+      backdrop
+        .querySelector(
+          "#cgShippingContinue"
+        )
+        .addEventListener(
+          "click",
+          () => {
+
+            const errorBox =
+              backdrop.querySelector(
+                "#cgShippingError"
+              );
+
+
+            const address = {
+
+              name:
+                backdrop
+                  .querySelector(
+                    "#cgShippingName"
+                  )
+                  .value
+                  .trim(),
+
+              email:
+                backdrop
+                  .querySelector(
+                    "#cgShippingEmail"
+                  )
+                  .value
+                  .trim(),
+
+              phone:
+                backdrop
+                  .querySelector(
+                    "#cgShippingPhone"
+                  )
+                  .value
+                  .trim(),
+
+              addressLine1:
+                backdrop
+                  .querySelector(
+                    "#cgShippingAddress1"
+                  )
+                  .value
+                  .trim(),
+
+              addressLine2:
+                backdrop
+                  .querySelector(
+                    "#cgShippingAddress2"
+                  )
+                  .value
+                  .trim(),
+
+              city:
+                backdrop
+                  .querySelector(
+                    "#cgShippingCity"
+                  )
+                  .value
+                  .trim(),
+
+              state:
+                "CA",
+
+              postalCode:
+                backdrop
+                  .querySelector(
+                    "#cgShippingZip"
+                  )
+                  .value
+                  .trim(),
+
+              country:
+                "US"
+
+            };
+
+
+            if (
+              !address.name ||
+              !address.email ||
+              !address.phone ||
+              !address.addressLine1 ||
+              !address.city ||
+              !address.postalCode
+            ) {
+
+              errorBox.textContent =
+                "Please complete every required field.";
+
+              return;
+
+            }
+
+
+            if (
+              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                address.email
+              )
+            ) {
+
+              errorBox.textContent =
+                "Please enter a valid email address.";
+
+              return;
+
+            }
+
+
+            if (
+              !isCaliforniaZip(
+                address.postalCode
+              )
+            ) {
+
+              errorBox.textContent =
+                "Please enter a valid California ZIP code.";
+
+              return;
+
+            }
+
+
+            saveShippingAddress(
+              address
+            );
+
+
+            close(
+              address
+            );
+
+          }
+        );
+
+    }
+  );
 
 }
 
@@ -1210,7 +1967,9 @@ function showOrderSuccessModal() {
 
 
   const modal =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
 
   modal.id =
@@ -1348,14 +2107,15 @@ function showOrderSuccessModal() {
     "hidden";
 
 
-  const closeModal = () => {
+  const closeModal =
+    () => {
 
-    modal.remove();
+      modal.remove();
 
-    document.body.style.overflow =
-      "";
+      document.body.style.overflow =
+        "";
 
-  };
+    };
 
 
   document
@@ -1386,7 +2146,9 @@ function showOrderSuccessModal() {
 
 async function checkoutWithSquare() {
 
-  if (cart.length === 0) {
+  if (
+    cart.length === 0
+  ) {
 
     showToast(
       "The pantry's empty."
@@ -1397,8 +2159,40 @@ async function checkoutWithSquare() {
   }
 
 
+  let shippingAddress =
+    null;
+
+
+  /*
+    SHIPPING ONLY:
+    COLLECT CALIFORNIA ADDRESS BEFORE
+    REQUESTING THE SQUARE CHECKOUT LINK.
+  */
+
+  if (
+    fulfillmentMethod ===
+    "shipping"
+  ) {
+
+    shippingAddress =
+      await collectCaliforniaShippingAddress();
+
+
+    if (
+      !shippingAddress
+    ) {
+
+      return;
+
+    }
+
+  }
+
+
   const button =
-    document.getElementById("checkoutButton");
+    document.getElementById(
+      "checkoutButton"
+    );
 
 
   if (!button) {
@@ -1410,42 +2204,73 @@ async function checkoutWithSquare() {
     button.textContent;
 
 
-  button.disabled = true;
+  button.disabled =
+    true;
+
 
   button.textContent =
-    fulfillmentMethod === "pickup"
+    fulfillmentMethod ===
+    "pickup"
       ? "Opening Pickup Checkout..."
       : "Opening Secure Checkout...";
 
 
   try {
 
+    const checkoutBody = {
+
+      fulfillment:
+        fulfillmentMethod,
+
+      items:
+        cart.map(
+          item => ({
+
+            id:
+              item.id,
+
+            size:
+              item.size,
+
+            quantity:
+              item.quantity
+
+          })
+        )
+
+    };
+
+
+    if (
+      fulfillmentMethod ===
+      "shipping"
+    ) {
+
+      checkoutBody.shippingAddress =
+        shippingAddress;
+
+    }
+
+
     const response =
       await fetch(
         CROOKED_GATE_CHECKOUT_URL,
         {
-          method: "POST",
+
+          method:
+            "POST",
 
           headers: {
+
             "Content-Type":
               "application/json"
+
           },
 
-          body: JSON.stringify({
-
-            fulfillment:
-              fulfillmentMethod,
-
-            items:
-              cart.map(item => ({
-
-                id: item.id,
-                size: item.size,
-                quantity: item.quantity
-
-              }))
-
-          })
+          body:
+            JSON.stringify(
+              checkoutBody
+            )
 
         }
       );
@@ -1468,7 +2293,9 @@ async function checkoutWithSquare() {
     }
 
 
-    if (!response.ok) {
+    if (
+      !response.ok
+    ) {
 
       throw new Error(
         data.error ||
@@ -1478,7 +2305,9 @@ async function checkoutWithSquare() {
     }
 
 
-    if (!data.checkoutUrl) {
+    if (
+      !data.checkoutUrl
+    ) {
 
       throw new Error(
         "Square did not return a checkout link."
@@ -1498,7 +2327,9 @@ async function checkoutWithSquare() {
     );
 
 
-    button.disabled = false;
+    button.disabled =
+      false;
+
 
     button.textContent =
       originalText;
@@ -1536,16 +2367,14 @@ function handleOrderCompleteReturn() {
   }
 
 
-  /* CLEAR PURCHASED ITEMS IMMEDIATELY */
-
   cart = [];
+
 
   saveCart();
 
+
   renderPantry();
 
-
-  /* CLEAN THE URL */
 
   const cleanUrl =
     window.location.pathname +
@@ -1558,8 +2387,6 @@ function handleOrderCompleteReturn() {
     cleanUrl
   );
 
-
-  /* SHOW SUCCESS MODAL */
 
   showOrderSuccessModal();
 
@@ -1575,15 +2402,15 @@ document.addEventListener(
   event => {
 
 
-    /* SIZE BUTTON */
-
     const sizeButton =
       event.target.closest(
         ".size-button"
       );
 
 
-    if (sizeButton) {
+    if (
+      sizeButton
+    ) {
 
       selectProductSize(
 
@@ -1600,15 +2427,15 @@ document.addEventListener(
     }
 
 
-    /* ADD PRODUCT */
-
     const addButton =
       event.target.closest(
         "[data-add-product]"
       );
 
 
-    if (addButton) {
+    if (
+      addButton
+    ) {
 
       handleProductAdd(
         addButton
@@ -1619,15 +2446,15 @@ document.addEventListener(
     }
 
 
-    /* QUANTITY MINUS */
-
     const minusButton =
       event.target.closest(
         "[data-cart-minus]"
       );
 
 
-    if (minusButton) {
+    if (
+      minusButton
+    ) {
 
       changeQuantity(
 
@@ -1644,15 +2471,15 @@ document.addEventListener(
     }
 
 
-    /* QUANTITY PLUS */
-
     const plusButton =
       event.target.closest(
         "[data-cart-plus]"
       );
 
 
-    if (plusButton) {
+    if (
+      plusButton
+    ) {
 
       changeQuantity(
 
@@ -1669,15 +2496,15 @@ document.addEventListener(
     }
 
 
-    /* REMOVE */
-
     const removeButton =
       event.target.closest(
         "[data-cart-remove]"
       );
 
 
-    if (removeButton) {
+    if (
+      removeButton
+    ) {
 
       removeCartItem(
 
@@ -1705,7 +2532,9 @@ document.addEventListener(
       );
 
 
-    if (!fulfillmentInput) {
+    if (
+      !fulfillmentInput
+    ) {
       return;
     }
 
@@ -1722,51 +2551,50 @@ document.addEventListener(
    STATIC BUTTONS
    ========================================================= */
 
-
-/* OPEN PANTRY */
-
 document
-  .getElementById("pantryButton")
+  .getElementById(
+    "pantryButton"
+  )
   ?.addEventListener(
     "click",
     openPantry
   );
 
 
-/* CLOSE PANTRY */
-
 document
-  .getElementById("closePantryButton")
+  .getElementById(
+    "closePantryButton"
+  )
   ?.addEventListener(
     "click",
     closePantry
   );
 
 
-/* OVERLAY */
-
 document
-  .getElementById("pantryOverlay")
+  .getElementById(
+    "pantryOverlay"
+  )
   ?.addEventListener(
     "click",
     closePantry
   );
 
 
-/* KEEP SHOPPING */
-
 document
-  .getElementById("keepShoppingButton")
+  .getElementById(
+    "keepShoppingButton"
+  )
   ?.addEventListener(
     "click",
     closePantry
   );
 
 
-/* SQUARE CHECKOUT */
-
 document
-  .getElementById("checkoutButton")
+  .getElementById(
+    "checkoutButton"
+  )
   ?.addEventListener(
     "click",
     checkoutWithSquare
@@ -1781,7 +2609,10 @@ document.addEventListener(
   "keydown",
   event => {
 
-    if (event.key === "Escape") {
+    if (
+      event.key ===
+      "Escape"
+    ) {
 
       closePantry();
 
