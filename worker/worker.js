@@ -149,12 +149,139 @@ function calculateShipping(productOunces) {
 }
 
 
+function isCaliforniaZip(postalCode) {
+  if (
+    typeof postalCode !== "string" ||
+    !/^\d{5}(-\d{4})?$/.test(postalCode)
+  ) {
+    return false;
+  }
+
+  const zip = Number(
+    postalCode.slice(0, 5)
+  );
+
+  return (
+    zip >= 90001 &&
+    zip <= 96162
+  );
+}
+
+
+function validateShippingAddress(address) {
+  if (
+    !address ||
+    typeof address !== "object"
+  ) {
+    throw new Error(
+      "Please enter your California shipping address."
+    );
+  }
+
+
+  const name =
+    String(address.name || "").trim();
+
+  const email =
+    String(address.email || "").trim();
+
+  const phone =
+    String(address.phone || "").trim();
+
+  const addressLine1 =
+    String(address.addressLine1 || "").trim();
+
+  const addressLine2 =
+    String(address.addressLine2 || "").trim();
+
+  const city =
+    String(address.city || "").trim();
+
+  const state =
+    String(address.state || "")
+      .trim()
+      .toUpperCase();
+
+  const postalCode =
+    String(address.postalCode || "").trim();
+
+  const country =
+    String(address.country || "US")
+      .trim()
+      .toUpperCase();
+
+
+  if (
+    !name ||
+    !email ||
+    !phone ||
+    !addressLine1 ||
+    !city ||
+    !postalCode
+  ) {
+    throw new Error(
+      "Please complete your shipping address."
+    );
+  }
+
+
+  if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email
+    )
+  ) {
+    throw new Error(
+      "Please enter a valid email address."
+    );
+  }
+
+
+  if (state !== "CA") {
+    throw new Error(
+      "Crooked Gate currently ships only to California addresses."
+    );
+  }
+
+
+  if (country !== "US") {
+    throw new Error(
+      "Crooked Gate currently ships only to California addresses."
+    );
+  }
+
+
+  if (
+    !isCaliforniaZip(
+      postalCode
+    )
+  ) {
+    throw new Error(
+      "Please enter a valid California ZIP code."
+    );
+  }
+
+
+  return {
+    name,
+    email,
+    phone,
+    addressLine1,
+    addressLine2,
+    city,
+    state: "CA",
+    postalCode,
+    country: "US"
+  };
+}
+
+
 function buildLineItems(items) {
   const lineItems = [];
   let productOunces = 0;
 
   for (const item of items) {
-    const product = PRODUCTS[item.id];
+    const product =
+      PRODUCTS[item.id];
 
     if (!product) {
       throw new Error(
@@ -162,7 +289,8 @@ function buildLineItems(items) {
       );
     }
 
-    const size = item.size;
+    const size =
+      item.size;
 
     if (
       size !== "2 oz" &&
@@ -173,7 +301,8 @@ function buildLineItems(items) {
       );
     }
 
-    const quantity = Number(item.quantity);
+    const quantity =
+      Number(item.quantity);
 
     if (
       !Number.isInteger(quantity) ||
@@ -195,12 +324,16 @@ function buildLineItems(items) {
     }
 
     lineItems.push({
-      catalog_object_id: catalogObjectId,
-      quantity: String(quantity)
+      catalog_object_id:
+        catalogObjectId,
+
+      quantity:
+        String(quantity)
     });
 
     productOunces +=
-      product.ounces[size] * quantity;
+      product.ounces[size] *
+      quantity;
   }
 
   return {
@@ -214,7 +347,8 @@ async function createCheckout(request, env) {
   let body;
 
   try {
-    body = await request.json();
+    body =
+      await request.json();
   } catch {
     return jsonResponse(
       request,
@@ -234,7 +368,8 @@ async function createCheckout(request, env) {
     return jsonResponse(
       request,
       {
-        error: "The pantry is empty."
+        error:
+          "The pantry is empty."
       },
       400
     );
@@ -247,35 +382,44 @@ async function createCheckout(request, env) {
       : "shipping";
 
 
-  /*
-    Shipping requires the customer to confirm
-    California before checkout is created.
-  */
+  let shippingAddress =
+    null;
+
 
   if (
-    fulfillment === "shipping" &&
-    body.californiaConfirmed !== true
+    fulfillment === "shipping"
   ) {
-    return jsonResponse(
-      request,
-      {
-        error:
-          "Please confirm that your order is shipping to a California address."
-      },
-      400
-    );
+    try {
+      shippingAddress =
+        validateShippingAddress(
+          body.shippingAddress
+        );
+    } catch (error) {
+      return jsonResponse(
+        request,
+        {
+          error:
+            error.message
+        },
+        400
+      );
+    }
   }
 
 
   let built;
 
   try {
-    built = buildLineItems(body.items);
+    built =
+      buildLineItems(
+        body.items
+      );
   } catch (error) {
     return jsonResponse(
       request,
       {
-        error: error.message
+        error:
+          error.message
       },
       400
     );
@@ -298,13 +442,20 @@ async function createCheckout(request, env) {
   /*
     SHIPPING
 
-    Crooked Gate only confirms that the buyer
-    intends to ship within California.
+    The customer enters the shipping address
+    on Crooked Gate first.
 
-    Square collects the actual shipping address.
+    The Worker verifies that it is a California
+    address before creating the Square checkout.
+
+    Square then displays its normal shipping
+    address section, pre-populated with the
+    address supplied by Crooked Gate.
   */
 
-  if (fulfillment === "shipping") {
+  if (
+    fulfillment === "shipping"
+  ) {
     let shippingAmount;
 
     try {
@@ -316,7 +467,8 @@ async function createCheckout(request, env) {
       return jsonResponse(
         request,
         {
-          error: error.message
+          error:
+            error.message
         },
         400
       );
@@ -325,17 +477,22 @@ async function createCheckout(request, env) {
 
     order.service_charges = [
       {
-        name: "Shipping",
+        name:
+          "Shipping",
 
         calculation_phase:
           "SUBTOTAL_PHASE",
 
         amount_money: {
-          amount: shippingAmount,
-          currency: "USD"
+          amount:
+            shippingAmount,
+
+          currency:
+            "USD"
         },
 
-        taxable: true
+        taxable:
+          true
       }
     ];
   }
@@ -345,15 +502,23 @@ async function createCheckout(request, env) {
     PICKUP
   */
 
-  if (fulfillment === "pickup") {
+  if (
+    fulfillment === "pickup"
+  ) {
     order.fulfillments = [
       {
-        type: "PICKUP",
-        state: "PROPOSED",
+        type:
+          "PICKUP",
+
+        state:
+          "PROPOSED",
 
         pickup_details: {
-          schedule_type: "ASAP",
-          prep_time_duration: "PT48H",
+          schedule_type:
+            "ASAP",
+
+          prep_time_duration:
+            "PT48H",
 
           recipient: {
             display_name:
@@ -380,15 +545,11 @@ async function createCheckout(request, env) {
     order,
 
     checkout_options: {
-      allow_tipping: false,
+      allow_tipping:
+        false,
 
       redirect_url:
         "https://crookedgate.co/?order=complete",
-
-      /*
-        Square collects the shipping address
-        only for shipped orders.
-      */
 
       ask_for_shipping_address:
         fulfillment === "shipping"
@@ -401,6 +562,58 @@ async function createCheckout(request, env) {
   };
 
 
+  /*
+    PRE-POPULATE SQUARE
+
+    This saves the customer from retyping the
+    address they just entered on Crooked Gate.
+
+    Square can still display its own shipping
+    address fields before payment.
+  */
+
+  if (
+    fulfillment === "shipping" &&
+    shippingAddress
+  ) {
+    squarePayload.pre_populated_data = {
+      buyer_email:
+        shippingAddress.email,
+
+      buyer_phone_number:
+        shippingAddress.phone,
+
+      buyer_address: {
+        address_line_1:
+          shippingAddress.addressLine1,
+
+        locality:
+          shippingAddress.city,
+
+        administrative_district_level_1:
+          "CA",
+
+        postal_code:
+          shippingAddress.postalCode,
+
+        country:
+          "US"
+      }
+    };
+
+
+    if (
+      shippingAddress.addressLine2
+    ) {
+      squarePayload
+        .pre_populated_data
+        .buyer_address
+        .address_line_2 =
+          shippingAddress.addressLine2;
+    }
+  }
+
+
   let squareResponse;
 
   try {
@@ -408,7 +621,8 @@ async function createCheckout(request, env) {
       await fetch(
         "https://connect.squareup.com/v2/online-checkout/payment-links",
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
             "Authorization":
@@ -454,7 +668,9 @@ async function createCheckout(request, env) {
   }
 
 
-  if (!squareResponse.ok) {
+  if (
+    !squareResponse.ok
+  ) {
     console.error(
       "Square checkout error:",
       squareResponse.status,
@@ -477,7 +693,9 @@ async function createCheckout(request, env) {
     squareData.payment_link?.url;
 
 
-  if (!checkoutUrl) {
+  if (
+    !checkoutUrl
+  ) {
     console.error(
       "Square checkout missing URL:",
       JSON.stringify(squareData)
@@ -506,12 +724,15 @@ async function createCheckout(request, env) {
 export default {
   async fetch(request, env) {
 
-    if (request.method === "OPTIONS") {
+    if (
+      request.method === "OPTIONS"
+    ) {
       return new Response(
         null,
         {
           status: 204,
-          headers: corsHeaders(request)
+          headers:
+            corsHeaders(request)
         }
       );
     }
@@ -535,7 +756,8 @@ export default {
     return jsonResponse(
       request,
       {
-        error: "Not found."
+        error:
+          "Not found."
       },
       404
     );
