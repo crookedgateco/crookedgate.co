@@ -277,7 +277,7 @@ function ensureFulfillmentStyles() {
       margin-bottom: 5px;
     }
 
-    .cg-shipping-backdrop {
+    .cg-ca-backdrop {
       position: fixed;
       inset: 0;
       z-index: 10050;
@@ -286,99 +286,46 @@ function ensureFulfillmentStyles() {
       align-items: center;
       justify-content: center;
       padding: 18px;
-      overflow-y: auto;
     }
 
-    .cg-shipping-modal {
+    .cg-ca-modal {
       position: relative;
-      width: min(560px, 100%);
-      max-height: calc(100vh - 36px);
-      overflow-y: auto;
+      width: min(500px, 100%);
       box-sizing: border-box;
       background: #f2eadc;
       color: #17140f;
       border: 3px solid #17140f;
-      padding: 28px 22px;
+      padding: 30px 24px;
       box-shadow: 0 18px 55px rgba(0, 0, 0, 0.42);
+      text-align: center;
     }
 
-    .cg-shipping-modal h2 {
-      margin: 0 0 10px;
+    .cg-ca-modal h2 {
+      margin: 0 0 14px;
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       font-size: 2rem;
+      line-height: 1;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
 
-    .cg-shipping-intro {
-      margin: 0 0 20px;
+    .cg-ca-modal p {
+      margin: 0 auto 22px;
+      max-width: 390px;
       font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.5;
+      font-size: 1rem;
+      line-height: 1.55;
     }
 
-    .cg-shipping-notice {
-      margin: 0 0 20px;
-      padding: 12px 14px;
-      border: 2px solid #17140f;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .cg-shipping-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .cg-shipping-field {
+    .cg-ca-actions {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-    }
-
-    .cg-shipping-field.full {
-      grid-column: 1 / -1;
-    }
-
-    .cg-shipping-field label {
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .cg-shipping-field input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #17140f;
-      border-radius: 0;
-      background: #fffdf8;
-      color: #17140f;
-      font: inherit;
-    }
-
-    .cg-shipping-state {
-      padding: 12px;
-      border: 1px solid #17140f;
-      background: rgba(23, 20, 15, 0.07);
-      font-weight: 700;
-    }
-
-    .cg-shipping-error {
-      min-height: 20px;
-      margin-top: 12px;
-      color: #17140f;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .cg-shipping-actions {
-      display: flex;
       gap: 10px;
-      margin-top: 18px;
     }
 
-    .cg-shipping-actions button {
-      padding: 14px 16px;
+    .cg-ca-actions button {
+      width: 100%;
+      padding: 15px 16px;
       border: 2px solid #17140f;
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       font-size: 1rem;
@@ -387,31 +334,26 @@ function ensureFulfillmentStyles() {
       cursor: pointer;
     }
 
-    .cg-shipping-back {
-      background: transparent;
-      color: #17140f;
-    }
-
-    .cg-shipping-continue {
-      flex: 1;
+    .cg-ca-confirm {
       background: #17140f;
       color: #f2eadc;
     }
 
-    @media (max-width: 560px) {
+    .cg-ca-pickup {
+      background: transparent;
+      color: #17140f;
+    }
 
-      .cg-shipping-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .cg-shipping-field.full {
-        grid-column: auto;
-      }
-
-      .cg-shipping-actions {
-        flex-direction: column;
-      }
-
+    .cg-ca-cancel {
+      margin-top: 6px;
+      border: 0 !important;
+      background: transparent;
+      color: #17140f;
+      font-family: Georgia, "Times New Roman", serif !important;
+      font-size: 0.9rem !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+      text-decoration: underline;
     }
 
   `;
@@ -1410,104 +1352,13 @@ function showToast(message) {
 
 
 /* =========================================================
-   SHIPPING ADDRESS
-   CALIFORNIA ONLY
+   CALIFORNIA SHIPPING CONFIRMATION
    ========================================================= */
 
-function escapeShippingValue(value) {
-
-  return String(
-    value || ""
-  )
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-    .replaceAll(
-      '"',
-      "&quot;"
-    );
-
-}
-
-
-function getSavedShippingAddress() {
-
-  try {
-
-    return JSON.parse(
-      sessionStorage.getItem(
-        "crookedGateShippingAddress"
-      ) || "{}"
-    );
-
-  } catch {
-
-    return {};
-
-  }
-
-}
-
-
-function saveShippingAddress(
-  address
-) {
-
-  sessionStorage.setItem(
-    "crookedGateShippingAddress",
-    JSON.stringify(address)
-  );
-
-}
-
-
-function isCaliforniaZip(
-  postalCode
-) {
-
-  if (
-    !/^\d{5}(-\d{4})?$/.test(
-      postalCode
-    )
-  ) {
-    return false;
-  }
-
-
-  const zip =
-    Number(
-      postalCode.slice(
-        0,
-        5
-      )
-    );
-
-
-  return (
-    zip >= 90001 &&
-    zip <= 96162
-  );
-
-}
-
-
-function collectCaliforniaShippingAddress() {
+function confirmCaliforniaShipping() {
 
   return new Promise(
     resolve => {
-
-      const saved =
-        getSavedShippingAddress();
-
 
       const backdrop =
         document.createElement(
@@ -1516,244 +1367,58 @@ function collectCaliforniaShippingAddress() {
 
 
       backdrop.className =
-        "cg-shipping-backdrop";
+        "cg-ca-backdrop";
 
 
       backdrop.innerHTML = `
 
         <div
-          class="cg-shipping-modal"
+          class="cg-ca-modal"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="cgShippingTitle"
+          aria-labelledby="cgCaTitle"
         >
 
           <h2
-            id="cgShippingTitle"
+            id="cgCaTitle"
           >
-            Shipping Address
+            California Shipping Only
           </h2>
 
 
-          <p
-            class="cg-shipping-intro"
-          >
-            Enter the address where you'd like your Crooked Gate order shipped.
+          <p>
+            Before we send you to secure checkout, please confirm that this order will be shipped to a California address.
           </p>
 
 
           <div
-            class="cg-shipping-notice"
-          >
-            Crooked Gate currently ships only to California addresses.
-          </div>
-
-
-          <div
-            class="cg-shipping-grid"
-          >
-
-            <div
-              class="cg-shipping-field full"
-            >
-
-              <label
-                for="cgShippingName"
-              >
-                Full Name
-              </label>
-
-              <input
-                id="cgShippingName"
-                type="text"
-                autocomplete="name"
-                value="${escapeShippingValue(
-                  saved.name
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field"
-            >
-
-              <label
-                for="cgShippingEmail"
-              >
-                Email
-              </label>
-
-              <input
-                id="cgShippingEmail"
-                type="email"
-                autocomplete="email"
-                value="${escapeShippingValue(
-                  saved.email
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field"
-            >
-
-              <label
-                for="cgShippingPhone"
-              >
-                Phone
-              </label>
-
-              <input
-                id="cgShippingPhone"
-                type="tel"
-                autocomplete="tel"
-                value="${escapeShippingValue(
-                  saved.phone
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field full"
-            >
-
-              <label
-                for="cgShippingAddress1"
-              >
-                Street Address
-              </label>
-
-              <input
-                id="cgShippingAddress1"
-                type="text"
-                autocomplete="address-line1"
-                value="${escapeShippingValue(
-                  saved.addressLine1
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field full"
-            >
-
-              <label
-                for="cgShippingAddress2"
-              >
-                Apt, Suite, Unit
-                (Optional)
-              </label>
-
-              <input
-                id="cgShippingAddress2"
-                type="text"
-                autocomplete="address-line2"
-                value="${escapeShippingValue(
-                  saved.addressLine2
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field"
-            >
-
-              <label
-                for="cgShippingCity"
-              >
-                City
-              </label>
-
-              <input
-                id="cgShippingCity"
-                type="text"
-                autocomplete="address-level2"
-                value="${escapeShippingValue(
-                  saved.city
-                )}"
-              >
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field"
-            >
-
-              <label>
-                State
-              </label>
-
-              <div
-                class="cg-shipping-state"
-              >
-                California (CA)
-              </div>
-
-            </div>
-
-
-            <div
-              class="cg-shipping-field"
-            >
-
-              <label
-                for="cgShippingZip"
-              >
-                ZIP Code
-              </label>
-
-              <input
-                id="cgShippingZip"
-                type="text"
-                inputmode="numeric"
-                autocomplete="postal-code"
-                value="${escapeShippingValue(
-                  saved.postalCode
-                )}"
-              >
-
-            </div>
-
-          </div>
-
-
-          <div
-            id="cgShippingError"
-            class="cg-shipping-error"
-            aria-live="polite"
-          ></div>
-
-
-          <div
-            class="cg-shipping-actions"
+            class="cg-ca-actions"
           >
 
             <button
-              id="cgShippingBack"
-              class="cg-shipping-back"
+              id="cgCaConfirm"
+              class="cg-ca-confirm"
               type="button"
             >
-              Back
+              Yes, I'm Shipping to California →
             </button>
 
 
             <button
-              id="cgShippingContinue"
-              class="cg-shipping-continue"
+              id="cgCaPickup"
+              class="cg-ca-pickup"
               type="button"
             >
-              Continue to Secure Checkout →
+              Use Local Pickup Instead
+            </button>
+
+
+            <button
+              id="cgCaCancel"
+              class="cg-ca-cancel"
+              type="button"
+            >
+              Back to Pantry
             </button>
 
           </div>
@@ -1791,13 +1456,13 @@ function collectCaliforniaShippingAddress() {
 
       backdrop
         .querySelector(
-          "#cgShippingBack"
+          "#cgCaConfirm"
         )
         .addEventListener(
           "click",
           () => {
 
-            close(null);
+            close("confirmed");
 
           }
         );
@@ -1805,138 +1470,27 @@ function collectCaliforniaShippingAddress() {
 
       backdrop
         .querySelector(
-          "#cgShippingContinue"
+          "#cgCaPickup"
         )
         .addEventListener(
           "click",
           () => {
 
-            const errorBox =
-              backdrop.querySelector(
-                "#cgShippingError"
-              );
+            close("pickup");
+
+          }
+        );
 
 
-            const address = {
+      backdrop
+        .querySelector(
+          "#cgCaCancel"
+        )
+        .addEventListener(
+          "click",
+          () => {
 
-              name:
-                backdrop
-                  .querySelector(
-                    "#cgShippingName"
-                  )
-                  .value
-                  .trim(),
-
-              email:
-                backdrop
-                  .querySelector(
-                    "#cgShippingEmail"
-                  )
-                  .value
-                  .trim(),
-
-              phone:
-                backdrop
-                  .querySelector(
-                    "#cgShippingPhone"
-                  )
-                  .value
-                  .trim(),
-
-              addressLine1:
-                backdrop
-                  .querySelector(
-                    "#cgShippingAddress1"
-                  )
-                  .value
-                  .trim(),
-
-              addressLine2:
-                backdrop
-                  .querySelector(
-                    "#cgShippingAddress2"
-                  )
-                  .value
-                  .trim(),
-
-              city:
-                backdrop
-                  .querySelector(
-                    "#cgShippingCity"
-                  )
-                  .value
-                  .trim(),
-
-              state:
-                "CA",
-
-              postalCode:
-                backdrop
-                  .querySelector(
-                    "#cgShippingZip"
-                  )
-                  .value
-                  .trim(),
-
-              country:
-                "US"
-
-            };
-
-
-            if (
-              !address.name ||
-              !address.email ||
-              !address.phone ||
-              !address.addressLine1 ||
-              !address.city ||
-              !address.postalCode
-            ) {
-
-              errorBox.textContent =
-                "Please complete every required field.";
-
-              return;
-
-            }
-
-
-            if (
-              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                address.email
-              )
-            ) {
-
-              errorBox.textContent =
-                "Please enter a valid email address.";
-
-              return;
-
-            }
-
-
-            if (
-              !isCaliforniaZip(
-                address.postalCode
-              )
-            ) {
-
-              errorBox.textContent =
-                "Please enter a valid California ZIP code.";
-
-              return;
-
-            }
-
-
-            saveShippingAddress(
-              address
-            );
-
-
-            close(
-              address
-            );
+            close("cancel");
 
           }
         );
@@ -2159,14 +1713,16 @@ async function checkoutWithSquare() {
   }
 
 
-  let shippingAddress =
-    null;
+  let californiaConfirmed =
+    false;
 
 
   /*
     SHIPPING ONLY:
-    COLLECT CALIFORNIA ADDRESS BEFORE
-    REQUESTING THE SQUARE CHECKOUT LINK.
+    ASK FOR A SIMPLE CALIFORNIA CONFIRMATION.
+
+    SQUARE WILL COLLECT THE ACTUAL
+    SHIPPING ADDRESS.
   */
 
   if (
@@ -2174,17 +1730,36 @@ async function checkoutWithSquare() {
     "shipping"
   ) {
 
-    shippingAddress =
-      await collectCaliforniaShippingAddress();
+    const confirmation =
+      await confirmCaliforniaShipping();
 
 
     if (
-      !shippingAddress
+      confirmation ===
+      "pickup"
+    ) {
+
+      setFulfillmentMethod(
+        "pickup"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      confirmation !==
+      "confirmed"
     ) {
 
       return;
 
     }
+
+
+    californiaConfirmed =
+      true;
 
   }
 
@@ -2246,8 +1821,8 @@ async function checkoutWithSquare() {
       "shipping"
     ) {
 
-      checkoutBody.shippingAddress =
-        shippingAddress;
+      checkoutBody.californiaConfirmed =
+        californiaConfirmed;
 
     }
 
