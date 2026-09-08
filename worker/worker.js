@@ -125,7 +125,8 @@ function jsonResponse(request, body, status = 200) {
 
 
 function calculateShipping(productOunces) {
-  const shippingWeight = productOunces + 3;
+  const shippingWeight =
+    productOunces + 3;
 
   if (shippingWeight <= 16) {
     return 850;
@@ -149,132 +150,6 @@ function calculateShipping(productOunces) {
 }
 
 
-function isCaliforniaZip(postalCode) {
-  if (
-    typeof postalCode !== "string" ||
-    !/^\d{5}(-\d{4})?$/.test(postalCode)
-  ) {
-    return false;
-  }
-
-  const zip = Number(
-    postalCode.slice(0, 5)
-  );
-
-  return (
-    zip >= 90001 &&
-    zip <= 96162
-  );
-}
-
-
-function validateShippingAddress(address) {
-  if (
-    !address ||
-    typeof address !== "object"
-  ) {
-    throw new Error(
-      "Please enter your California shipping address."
-    );
-  }
-
-
-  const name =
-    String(address.name || "").trim();
-
-  const email =
-    String(address.email || "").trim();
-
-  const phone =
-    String(address.phone || "").trim();
-
-  const addressLine1 =
-    String(address.addressLine1 || "").trim();
-
-  const addressLine2 =
-    String(address.addressLine2 || "").trim();
-
-  const city =
-    String(address.city || "").trim();
-
-  const state =
-    String(address.state || "")
-      .trim()
-      .toUpperCase();
-
-  const postalCode =
-    String(address.postalCode || "").trim();
-
-  const country =
-    String(address.country || "US")
-      .trim()
-      .toUpperCase();
-
-
-  if (
-    !name ||
-    !email ||
-    !phone ||
-    !addressLine1 ||
-    !city ||
-    !postalCode
-  ) {
-    throw new Error(
-      "Please complete your shipping address."
-    );
-  }
-
-
-  if (
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      email
-    )
-  ) {
-    throw new Error(
-      "Please enter a valid email address."
-    );
-  }
-
-
-  if (state !== "CA") {
-    throw new Error(
-      "Crooked Gate currently ships only to California addresses."
-    );
-  }
-
-
-  if (country !== "US") {
-    throw new Error(
-      "Crooked Gate currently ships only to California addresses."
-    );
-  }
-
-
-  if (
-    !isCaliforniaZip(
-      postalCode
-    )
-  ) {
-    throw new Error(
-      "Please enter a valid California ZIP code."
-    );
-  }
-
-
-  return {
-    name,
-    email,
-    phone,
-    addressLine1,
-    addressLine2,
-    city,
-    state: "CA",
-    postalCode,
-    country: "US"
-  };
-}
-
-
 function buildLineItems(items) {
   const lineItems = [];
   let productOunces = 0;
@@ -289,6 +164,7 @@ function buildLineItems(items) {
       );
     }
 
+
     const size =
       item.size;
 
@@ -300,6 +176,7 @@ function buildLineItems(items) {
         "One of the selected bag sizes is not available."
       );
     }
+
 
     const quantity =
       Number(item.quantity);
@@ -314,6 +191,7 @@ function buildLineItems(items) {
       );
     }
 
+
     const catalogObjectId =
       product.catalogObjectIds[size];
 
@@ -323,6 +201,7 @@ function buildLineItems(items) {
       );
     }
 
+
     lineItems.push({
       catalog_object_id:
         catalogObjectId,
@@ -331,10 +210,12 @@ function buildLineItems(items) {
         String(quantity)
     });
 
+
     productOunces +=
       product.ounces[size] *
       quantity;
   }
+
 
   return {
     lineItems,
@@ -345,6 +226,7 @@ function buildLineItems(items) {
 
 async function createCheckout(request, env) {
   let body;
+
 
   try {
     body =
@@ -382,32 +264,8 @@ async function createCheckout(request, env) {
       : "shipping";
 
 
-  let shippingAddress =
-    null;
-
-
-  if (
-    fulfillment === "shipping"
-  ) {
-    try {
-      shippingAddress =
-        validateShippingAddress(
-          body.shippingAddress
-        );
-    } catch (error) {
-      return jsonResponse(
-        request,
-        {
-          error:
-            error.message
-        },
-        400
-      );
-    }
-  }
-
-
   let built;
+
 
   try {
     built =
@@ -434,7 +292,8 @@ async function createCheckout(request, env) {
       built.lineItems,
 
     pricing_options: {
-      auto_apply_taxes: true
+      auto_apply_taxes:
+        true
     }
   };
 
@@ -442,21 +301,19 @@ async function createCheckout(request, env) {
   /*
     SHIPPING
 
-    The customer enters the shipping address
-    on Crooked Gate first.
+    Crooked Gate does not collect the customer's
+    shipping address.
 
-    The Worker verifies that it is a California
-    address before creating the Square checkout.
-
-    Square then displays its normal shipping
-    address section, pre-populated with the
-    address supplied by Crooked Gate.
+    The customer sees the California-only notice
+    on Crooked Gate, then Square collects the
+    shipping address during secure checkout.
   */
 
   if (
     fulfillment === "shipping"
   ) {
     let shippingAmount;
+
 
     try {
       shippingAmount =
@@ -533,6 +390,16 @@ async function createCheckout(request, env) {
   }
 
 
+  /*
+    SQUARE CHECKOUT
+
+    For shipping orders, Square collects the
+    customer's shipping address.
+
+    For pickup orders, Square does not request
+    a shipping address.
+  */
+
   const squarePayload = {
     idempotency_key:
       crypto.randomUUID(),
@@ -562,59 +429,8 @@ async function createCheckout(request, env) {
   };
 
 
-  /*
-    PRE-POPULATE SQUARE
-
-    This saves the customer from retyping the
-    address they just entered on Crooked Gate.
-
-    Square can still display its own shipping
-    address fields before payment.
-  */
-
-  if (
-    fulfillment === "shipping" &&
-    shippingAddress
-  ) {
-    squarePayload.pre_populated_data = {
-      buyer_email:
-        shippingAddress.email,
-
-      buyer_phone_number:
-        shippingAddress.phone,
-
-      buyer_address: {
-        address_line_1:
-          shippingAddress.addressLine1,
-
-        locality:
-          shippingAddress.city,
-
-        administrative_district_level_1:
-          "CA",
-
-        postal_code:
-          shippingAddress.postalCode,
-
-        country:
-          "US"
-      }
-    };
-
-
-    if (
-      shippingAddress.addressLine2
-    ) {
-      squarePayload
-        .pre_populated_data
-        .buyer_address
-        .address_line_2 =
-          shippingAddress.addressLine2;
-    }
-  }
-
-
   let squareResponse;
+
 
   try {
     squareResponse =
@@ -659,6 +475,7 @@ async function createCheckout(request, env) {
 
 
   let squareData;
+
 
   try {
     squareData =
