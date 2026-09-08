@@ -226,11 +226,6 @@ function calculateShipping(
   productOunces
 ) {
 
-  /*
-    Every shipment gets
-    3 oz packaging allowance.
-  */
-
   const shippingWeight =
     productOunces + 3;
 
@@ -355,13 +350,11 @@ function buildLineItems(items) {
 
 
     lineItems.push({
-
       catalog_object_id:
         catalogObjectId,
 
       quantity:
         String(quantity)
-
     });
 
 
@@ -375,6 +368,225 @@ function buildLineItems(items) {
   return {
     lineItems,
     productOunces
+  };
+
+}
+
+
+function normalizePhone(phone) {
+
+  const cleaned =
+    String(phone || "")
+      .replace(/[^\d+]/g, "");
+
+
+  if (
+    cleaned.startsWith("+1")
+  ) {
+
+    return cleaned;
+
+  }
+
+
+  const digits =
+    cleaned.replace(/\D/g, "");
+
+
+  if (
+    digits.length === 10
+  ) {
+
+    return `+1${digits}`;
+
+  }
+
+
+  if (
+    digits.length === 11 &&
+    digits.startsWith("1")
+  ) {
+
+    return `+${digits}`;
+
+  }
+
+
+  throw new Error(
+    "Please enter a valid phone number."
+  );
+
+}
+
+
+function validateShippingAddress(
+  address
+) {
+
+  if (
+    !address ||
+    typeof address !== "object"
+  ) {
+
+    throw new Error(
+      "Please enter a California shipping address."
+    );
+
+  }
+
+
+  const name =
+    String(
+      address.name || ""
+    ).trim();
+
+
+  const email =
+    String(
+      address.email || ""
+    ).trim();
+
+
+  const phone =
+    normalizePhone(
+      address.phone
+    );
+
+
+  const addressLine1 =
+    String(
+      address.addressLine1 || ""
+    ).trim();
+
+
+  const addressLine2 =
+    String(
+      address.addressLine2 || ""
+    ).trim();
+
+
+  const city =
+    String(
+      address.city || ""
+    ).trim();
+
+
+  const state =
+    String(
+      address.state || ""
+    )
+      .trim()
+      .toUpperCase();
+
+
+  const postalCode =
+    String(
+      address.postalCode || ""
+    ).trim();
+
+
+  const country =
+    String(
+      address.country || ""
+    )
+      .trim()
+      .toUpperCase();
+
+
+  if (
+    !name ||
+    !email ||
+    !addressLine1 ||
+    !city ||
+    !postalCode
+  ) {
+
+    throw new Error(
+      "Please complete the shipping address."
+    );
+
+  }
+
+
+  if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+      email
+    )
+  ) {
+
+    throw new Error(
+      "Please enter a valid email address."
+    );
+
+  }
+
+
+  if (
+    state !== "CA"
+  ) {
+
+    throw new Error(
+      "Crooked Gate currently ships only to California addresses."
+    );
+
+  }
+
+
+  if (
+    country !== "US"
+  ) {
+
+    throw new Error(
+      "Crooked Gate currently ships only to California addresses."
+    );
+
+  }
+
+
+  if (
+    !/^\d{5}(-\d{4})?$/.test(
+      postalCode
+    )
+  ) {
+
+    throw new Error(
+      "Please enter a valid California ZIP code."
+    );
+
+  }
+
+
+  const zip =
+    Number(
+      postalCode.slice(
+        0,
+        5
+      )
+    );
+
+
+  if (
+    zip < 90001 ||
+    zip > 96162
+  ) {
+
+    throw new Error(
+      "Crooked Gate currently ships only to California addresses."
+    );
+
+  }
+
+
+  return {
+    name,
+    email,
+    phone,
+    addressLine1,
+    addressLine2,
+    city,
+    state: "CA",
+    postalCode,
+    country: "US"
   };
 
 }
@@ -475,6 +687,10 @@ async function createCheckout(
   };
 
 
+  let recipient =
+    null;
+
+
   /*
     SHIPPING
   */
@@ -482,6 +698,27 @@ async function createCheckout(
   if (
     fulfillment === "shipping"
   ) {
+
+    try {
+
+      recipient =
+        validateShippingAddress(
+          body.shippingAddress
+        );
+
+    } catch (error) {
+
+      return jsonResponse(
+        request,
+        {
+          error:
+            error.message
+        },
+        400
+      );
+
+    }
+
 
     let shipping;
 
@@ -508,7 +745,6 @@ async function createCheckout(
 
 
     order.service_charges = [
-
       {
         name:
           "Shipping",
@@ -526,23 +762,69 @@ async function createCheckout(
 
         taxable:
           true
+      }
+    ];
+
+
+    order.fulfillments = [
+      {
+        type:
+          "SHIPMENT",
+
+        state:
+          "PROPOSED",
+
+        shipment_details: {
+
+          recipient: {
+
+            display_name:
+              recipient.name,
+
+            email_address:
+              recipient.email,
+
+            phone_number:
+              recipient.phone,
+
+            address: {
+
+              address_line_1:
+                recipient.addressLine1,
+
+              ...(recipient.addressLine2
+                ? {
+                    address_line_2:
+                      recipient.addressLine2
+                  }
+                : {}),
+
+              locality:
+                recipient.city,
+
+              administrative_district_level_1:
+                "CA",
+
+              postal_code:
+                recipient.postalCode,
+
+              country:
+                "US"
+
+            }
+
+          }
+
+        }
 
       }
-
     ];
 
   }
 
 
   /*
-    REAL SQUARE PICKUP FULFILLMENT
-
-    Square requires a recipient display
-    name when the fulfillment is created.
-
-    Checkout itself collects the buyer's
-    actual email and phone in Square's
-    normal Contact section.
+    PICKUP
   */
 
   if (
@@ -550,7 +832,6 @@ async function createCheckout(
   ) {
 
     order.fulfillments = [
-
       {
         type:
           "PICKUP",
@@ -572,12 +853,10 @@ async function createCheckout(
           },
 
           note:
-            "Local pickup in Lincoln, CA. Contact customer when order is ready and provide pickup location and instructions."
-
+            "Local pickup in Lincoln, CA."
         }
 
       }
-
     ];
 
   }
@@ -592,7 +871,7 @@ async function createCheckout(
       "https://crookedgate.co/?order=complete",
 
     ask_for_shipping_address:
-      fulfillment === "shipping"
+      false
 
   };
 
@@ -605,7 +884,7 @@ async function createCheckout(
     description:
       fulfillment === "pickup"
         ? "Crooked Gate Seasonings - Local Pickup - Lincoln, CA"
-        : "Crooked Gate Seasonings - Shipping",
+        : "Crooked Gate Seasonings - California Shipping",
 
     order,
 
@@ -615,9 +894,26 @@ async function createCheckout(
     payment_note:
       fulfillment === "pickup"
         ? "LOCAL PICKUP - LINCOLN, CA"
-        : "CROOKED GATE WEBSITE ORDER"
+        : "CROOKED GATE WEBSITE ORDER - CALIFORNIA SHIPPING"
 
   };
+
+
+  if (
+    fulfillment === "shipping"
+  ) {
+
+    squarePayload.pre_populated_data = {
+
+      buyer_email:
+        recipient.email,
+
+      buyer_phone_number:
+        recipient.phone
+
+    };
+
+  }
 
 
   let squareResponse;
@@ -716,7 +1012,9 @@ async function createCheckout(
     squareData.payment_link?.url;
 
 
-  if (!checkoutUrl) {
+  if (
+    !checkoutUrl
+  ) {
 
     console.error(
       "Square checkout missing URL:",
