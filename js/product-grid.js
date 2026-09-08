@@ -37,14 +37,32 @@ function renderProductGrid() {
           "2 oz";
 
 
-        return `
+        const hasProductPage =
+          product.id === "ranch";
 
-          <article class="product-card">
 
-            <a
-              class="product-label-link"
-              href="${product.url}"
-            >
+        const productImage =
+          hasProductPage
+            ? `
+
+              <a
+                class="product-label-link"
+                href="${product.url}"
+              >
+
+                <div class="label-frame">
+
+                  <img
+                    src="${product.image}"
+                    alt="Crooked Gate No. ${product.number} ${product.name}"
+                  >
+
+                </div>
+
+              </a>
+
+            `
+            : `
 
               <div class="label-frame">
 
@@ -55,7 +73,50 @@ function renderProductGrid() {
 
               </div>
 
-            </a>
+            `;
+
+
+        const productName =
+          hasProductPage
+            ? `
+
+              <a
+                class="product-name"
+                href="${product.url}"
+              >
+                ${product.name}
+              </a>
+
+            `
+            : `
+
+              <div class="product-name">
+                ${product.name}
+              </div>
+
+            `;
+
+
+        const exploreLink =
+          hasProductPage
+            ? `
+
+              <a
+                class="view-product"
+                href="${product.url}"
+              >
+                Explore No. ${product.number} →
+              </a>
+
+            `
+            : "";
+
+
+        return `
+
+          <article class="product-card">
+
+            ${productImage}
 
 
             <div class="product-info">
@@ -65,12 +126,7 @@ function renderProductGrid() {
               </div>
 
 
-              <a
-                class="product-name"
-                href="${product.url}"
-              >
-                ${product.name}
-              </a>
+              ${productName}
 
 
               <p class="product-description">
@@ -78,12 +134,7 @@ function renderProductGrid() {
               </p>
 
 
-              <a
-                class="view-product"
-                href="${product.url}"
-              >
-                Explore No. ${product.number} →
-              </a>
+              ${exploreLink}
 
 
               <div class="buy-box">
