@@ -230,6 +230,21 @@ function selectProductSize(
 
 function handleProductAdd(button) {
 
+  /*
+   * Prevent a second tap during the temporary
+   * "Added to Pantry" state from overwriting
+   * the button's real original text.
+   */
+
+  if (
+    button.classList.contains(
+      "added"
+    )
+  ) {
+    return;
+  }
+
+
   const productId =
     button.dataset.addProduct;
 
@@ -251,8 +266,20 @@ function handleProductAdd(button) {
   }
 
 
-  const originalText =
-    button.textContent;
+  /*
+   * Save the real button label once.
+   * This also preserves custom labels such as
+   * "Add No. 01 to Pantry" on the Ranch page.
+   */
+
+  if (
+    !button.dataset.originalText
+  ) {
+
+    button.dataset.originalText =
+      button.textContent.trim();
+
+  }
 
 
   button.classList.add(
@@ -270,8 +297,9 @@ function handleProductAdd(button) {
       "added"
     );
 
+
     button.textContent =
-      originalText;
+      button.dataset.originalText;
 
   }, 1000);
 
