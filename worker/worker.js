@@ -2,12 +2,10 @@ const PRODUCTS = {
   ranch: {
     number: "01",
     name: "Ranch",
-
     catalogObjectIds: {
       "2 oz": "HMVKA6RPGJKGJKVMNUE6TNMV",
       "8 oz": "QZKG3TLGDOSDVAQONCZDOSBF"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -17,12 +15,10 @@ const PRODUCTS = {
   "poultry-rub": {
     number: "02",
     name: "Poultry Rub",
-
     catalogObjectIds: {
       "2 oz": "PAHVOIQTMK7JVMWN63CFWJAX",
       "8 oz": "MKL7S3LT7TCC4YP76YFVMVR7"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -32,12 +28,10 @@ const PRODUCTS = {
   "butchers-blend": {
     number: "03",
     name: "Butcher's Blend",
-
     catalogObjectIds: {
       "2 oz": "OJR7QL3NCZ3Y6KS4VXKXVLIN",
       "8 oz": "WI6NUUMOPYWNOJYPL7MGR27Q"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -47,12 +41,10 @@ const PRODUCTS = {
   "smokehouse-rub": {
     number: "04",
     name: "Smokehouse Rub",
-
     catalogObjectIds: {
       "2 oz": "ZF3N7SUMGYHL3THTAL3LHD42",
       "8 oz": "46BHBDQJP5TIUELV7J6KHV75"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -62,12 +54,10 @@ const PRODUCTS = {
   "bbq-rub": {
     number: "05",
     name: "BBQ Rub",
-
     catalogObjectIds: {
       "2 oz": "IOSJ25ZOJQD7CHD7PMQZ77TQ",
       "8 oz": "2XDQ377MXQ6PWAKZTHJAQMVM"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -77,12 +67,10 @@ const PRODUCTS = {
   taco: {
     number: "06",
     name: "Taco",
-
     catalogObjectIds: {
       "2 oz": "2XUXSC7TFSXW6RLOA2FJGLCE",
       "8 oz": "B3WWWAE5D7CIPR4ZQNH7IOOK"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -92,12 +80,10 @@ const PRODUCTS = {
   fajitas: {
     number: "07",
     name: "Fajitas",
-
     catalogObjectIds: {
       "2 oz": "MLTXV2LL4WJ3JRSNEMGQN732",
       "8 oz": "MA5LD7OUT6Y6YFOY2DQS6UF3"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -107,12 +93,10 @@ const PRODUCTS = {
   "moms-spaghetti": {
     number: "08",
     name: "Mom's Spaghetti",
-
     catalogObjectIds: {
       "2 oz": "IVB6RUS2O7VISHUB227SJ2X5",
       "8 oz": "C4BQSKYX6EEKH2Z55I3KJFR7"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -122,12 +106,10 @@ const PRODUCTS = {
   "italian-seasoning": {
     number: "09",
     name: "Italian Seasoning",
-
     catalogObjectIds: {
       "2 oz": "ZVVAUE352SWCGBEDYJTBZDB4",
       "8 oz": "RRNTWNO7IMBKOGHG23VRZ6IN"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -137,12 +119,10 @@ const PRODUCTS = {
   "garlic-salt": {
     number: "10",
     name: "Garlic Salt",
-
     catalogObjectIds: {
       "2 oz": "YAFNMUGYOKUKGGVUDMYEWHLT",
       "8 oz": "MJ34RXSYNA2Q3MBNAR3IMWQJ"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -152,12 +132,10 @@ const PRODUCTS = {
   "homestead-blend": {
     number: "11",
     name: "Homestead Blend",
-
     catalogObjectIds: {
       "2 oz": "UI5LHCHDFDIVLOTZQYSP3YHV",
       "8 oz": "D7XC7EOPHYPPFNTJC5HWNBYC"
     },
-
     ounces: {
       "2 oz": 2,
       "8 oz": 8
@@ -177,12 +155,10 @@ function corsHeaders(request) {
   const origin =
     request.headers.get("Origin");
 
-
   const allowedOrigin =
     ALLOWED_ORIGINS.has(origin)
       ? origin
       : "https://crookedgate.co";
-
 
   return {
     "Access-Control-Allow-Origin":
@@ -231,42 +207,34 @@ function calculateShipping(
 
 
   if (shippingWeight <= 16) {
-
     return {
       amount: 850,
       weight: shippingWeight
     };
-
   }
 
 
   if (shippingWeight <= 32) {
-
     return {
       amount: 1250,
       weight: shippingWeight
     };
-
   }
 
 
   if (shippingWeight <= 48) {
-
     return {
       amount: 1550,
       weight: shippingWeight
     };
-
   }
 
 
   if (shippingWeight <= 80) {
-
     return {
       amount: 2050,
       weight: shippingWeight
     };
-
   }
 
 
@@ -291,11 +259,9 @@ function buildLineItems(items) {
 
 
     if (!product) {
-
       throw new Error(
         "One of the products in the pantry is not available."
       );
-
     }
 
 
@@ -307,11 +273,9 @@ function buildLineItems(items) {
       size !== "2 oz" &&
       size !== "8 oz"
     ) {
-
       throw new Error(
         "One of the selected bag sizes is not available."
       );
-
     }
 
 
@@ -324,11 +288,9 @@ function buildLineItems(items) {
       quantity < 1 ||
       quantity > 50
     ) {
-
       throw new Error(
         "One of the item quantities is invalid."
       );
-
     }
 
 
@@ -337,16 +299,10 @@ function buildLineItems(items) {
 
 
     if (!catalogObjectId) {
-
       throw new Error(
         "One of the selected products is not available in the Square catalog."
       );
-
     }
-
-
-    const ounces =
-      product.ounces[size];
 
 
     lineItems.push({
@@ -359,7 +315,7 @@ function buildLineItems(items) {
 
 
     productOunces +=
-      ounces *
+      product.ounces[size] *
       quantity;
 
   }
@@ -375,30 +331,13 @@ function buildLineItems(items) {
 
 function normalizePhone(phone) {
 
-  const cleaned =
-    String(phone || "")
-      .replace(/[^\d+]/g, "");
-
-
-  if (
-    cleaned.startsWith("+1")
-  ) {
-
-    return cleaned;
-
-  }
-
-
   const digits =
-    cleaned.replace(/\D/g, "");
+    String(phone || "")
+      .replace(/\D/g, "");
 
 
-  if (
-    digits.length === 10
-  ) {
-
+  if (digits.length === 10) {
     return `+1${digits}`;
-
   }
 
 
@@ -406,9 +345,7 @@ function normalizePhone(phone) {
     digits.length === 11 &&
     digits.startsWith("1")
   ) {
-
     return `+${digits}`;
-
   }
 
 
@@ -419,76 +356,57 @@ function normalizePhone(phone) {
 }
 
 
-function validateShippingAddress(
-  address
-) {
+function validateShippingAddress(address) {
 
   if (
     !address ||
     typeof address !== "object"
   ) {
-
     throw new Error(
       "Please enter a California shipping address."
     );
-
   }
 
 
   const name =
-    String(
-      address.name || ""
-    ).trim();
-
+    String(address.name || "")
+      .trim();
 
   const email =
-    String(
-      address.email || ""
-    ).trim();
-
+    String(address.email || "")
+      .trim();
 
   const phone =
     normalizePhone(
       address.phone
     );
 
-
   const addressLine1 =
     String(
       address.addressLine1 || ""
     ).trim();
-
 
   const addressLine2 =
     String(
       address.addressLine2 || ""
     ).trim();
 
-
   const city =
-    String(
-      address.city || ""
-    ).trim();
-
+    String(address.city || "")
+      .trim();
 
   const state =
-    String(
-      address.state || ""
-    )
+    String(address.state || "")
       .trim()
       .toUpperCase();
-
 
   const postalCode =
     String(
       address.postalCode || ""
     ).trim();
 
-
   const country =
-    String(
-      address.country || ""
-    )
+    String(address.country || "")
       .trim()
       .toUpperCase();
 
@@ -500,11 +418,9 @@ function validateShippingAddress(
     !city ||
     !postalCode
   ) {
-
     throw new Error(
       "Please complete the shipping address."
     );
-
   }
 
 
@@ -513,33 +429,19 @@ function validateShippingAddress(
       email
     )
   ) {
-
     throw new Error(
       "Please enter a valid email address."
     );
-
   }
 
 
   if (
-    state !== "CA"
-  ) {
-
-    throw new Error(
-      "Crooked Gate currently ships only to California addresses."
-    );
-
-  }
-
-
-  if (
+    state !== "CA" ||
     country !== "US"
   ) {
-
     throw new Error(
       "Crooked Gate currently ships only to California addresses."
     );
-
   }
 
 
@@ -548,20 +450,15 @@ function validateShippingAddress(
       postalCode
     )
   ) {
-
     throw new Error(
       "Please enter a valid California ZIP code."
     );
-
   }
 
 
   const zip =
     Number(
-      postalCode.slice(
-        0,
-        5
-      )
+      postalCode.slice(0, 5)
     );
 
 
@@ -569,11 +466,9 @@ function validateShippingAddress(
     zip < 90001 ||
     zip > 96162
   ) {
-
     throw new Error(
       "Crooked Gate currently ships only to California addresses."
     );
-
   }
 
 
@@ -584,9 +479,7 @@ function validateShippingAddress(
     addressLine1,
     addressLine2,
     city,
-    state: "CA",
-    postalCode,
-    country: "US"
+    postalCode
   };
 
 }
@@ -654,12 +547,6 @@ async function createCheckout(
 
   } catch (error) {
 
-    console.error(
-      "Crooked Gate cart validation error:",
-      error
-    );
-
-
     return jsonResponse(
       request,
       {
@@ -690,10 +577,6 @@ async function createCheckout(
   let recipient =
     null;
 
-
-  /*
-    SHIPPING
-  */
 
   if (
     fulfillment === "shipping"
@@ -766,6 +649,14 @@ async function createCheckout(
     ];
 
 
+    /*
+      REAL SQUARE SHIPMENT
+
+      Customer enters address once on
+      Crooked Gate. That address is placed
+      directly onto the Square order.
+    */
+
     order.fulfillments = [
       {
         type:
@@ -780,9 +671,6 @@ async function createCheckout(
 
             display_name:
               recipient.name,
-
-            email_address:
-              recipient.email,
 
             phone_number:
               recipient.phone,
@@ -823,10 +711,6 @@ async function createCheckout(
   }
 
 
-  /*
-    PICKUP
-  */
-
   if (
     fulfillment === "pickup"
   ) {
@@ -854,26 +738,13 @@ async function createCheckout(
 
           note:
             "Local pickup in Lincoln, CA."
+
         }
 
       }
     ];
 
   }
-
-
-  const checkoutOptions = {
-
-    allow_tipping:
-      false,
-
-    redirect_url:
-      "https://crookedgate.co/?order=complete",
-
-    ask_for_shipping_address:
-      false
-
-  };
 
 
   const squarePayload = {
@@ -888,8 +759,23 @@ async function createCheckout(
 
     order,
 
-    checkout_options:
-      checkoutOptions,
+    checkout_options: {
+
+      allow_tipping:
+        false,
+
+      redirect_url:
+        "https://crookedgate.co/?order=complete",
+
+      /*
+        Address has already been collected
+        and validated by Crooked Gate.
+      */
+
+      ask_for_shipping_address:
+        false
+
+    },
 
     payment_note:
       fulfillment === "pickup"
@@ -898,6 +784,13 @@ async function createCheckout(
 
   };
 
+
+  /*
+    PREFILL SQUARE CONTACT INFORMATION.
+
+    Also give Square the same buyer address.
+    Customer does not need to type it again.
+  */
 
   if (
     fulfillment === "shipping"
@@ -909,7 +802,33 @@ async function createCheckout(
         recipient.email,
 
       buyer_phone_number:
-        recipient.phone
+        recipient.phone,
+
+      buyer_address: {
+
+        address_line_1:
+          recipient.addressLine1,
+
+        ...(recipient.addressLine2
+          ? {
+              address_line_2:
+                recipient.addressLine2
+            }
+          : {}),
+
+        locality:
+          recipient.city,
+
+        administrative_district_level_1:
+          "CA",
+
+        postal_code:
+          recipient.postalCode,
+
+        country:
+          "US"
+
+      }
 
     };
 
@@ -984,9 +903,7 @@ async function createCheckout(
   }
 
 
-  if (
-    !squareResponse.ok
-  ) {
+  if (!squareResponse.ok) {
 
     console.error(
       "Square checkout error:",
@@ -1012,15 +929,7 @@ async function createCheckout(
     squareData.payment_link?.url;
 
 
-  if (
-    !checkoutUrl
-  ) {
-
-    console.error(
-      "Square checkout missing URL:",
-      JSON.stringify(squareData)
-    );
-
+  if (!checkoutUrl) {
 
     return jsonResponse(
       request,
@@ -1052,8 +961,7 @@ export default {
   ) {
 
     if (
-      request.method ===
-      "OPTIONS"
+      request.method === "OPTIONS"
     ) {
 
       return new Response(
