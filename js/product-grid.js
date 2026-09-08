@@ -37,8 +37,21 @@ function renderProductGrid() {
           "2 oz";
 
 
+        /* -------------------------------------------------
+           LIVE PRODUCT PAGES
+           Add product IDs here as their pages are completed.
+           ------------------------------------------------- */
+
+        const liveProductPages = [
+          "ranch",
+          "poultry-rub"
+        ];
+
+
         const hasProductPage =
-          product.id === "ranch";
+          liveProductPages.includes(
+            product.id
+          );
 
 
         const productImage =
@@ -268,8 +281,6 @@ function handleProductAdd(button) {
 
   /*
    * Save the real button label once.
-   * This also preserves custom labels such as
-   * "Add No. 01 to Pantry" on the Ranch page.
    */
 
   if (
